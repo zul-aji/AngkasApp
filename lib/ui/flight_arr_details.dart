@@ -1,15 +1,21 @@
+import 'package:angkasapp/database_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import '../response/airport_schedule.dart';
 import '../util_funcs.dart';
 import '../response/flight_details.dart';
 import '../service/airlabs_request.dart';
 
 class FlightArrDetails extends StatefulWidget {
   final String flightIata;
+  final FlightDetails forReminder;
 
   const FlightArrDetails({
     Key? key,
     required this.flightIata,
+    required this.forReminder,
   }) : super(key: key);
 
   @override
@@ -46,10 +52,24 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
-            const SliverAppBar(
+            SliverAppBar(
               title: Text("Arriving Flight"),
               pinned: true,
               floating: true,
+              actions: [
+                IconButton(
+                    onPressed: () async {
+                      await DatabaseHelper.instance
+                          .insertFlightDetails('arrNotif', widget.forReminder);
+                      showTopSnackBar(
+                        Overlay.of(context),
+                        CustomSnackBar.success(
+                          message: "Arriving Flight added to Reminder",
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.notification_add))
+              ],
             ),
           ];
         },
@@ -172,21 +192,21 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                     Row(
                       children: [
                         const Text("Time: "),
-                        Text(formatDateTime(arrTime))
+                        Text(dateTimetoString(arrTime))
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Estimated: "),
-                        Text(formatDateTime(arrEstimated))
+                        Text(dateTimetoString(arrEstimated))
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Actual: "),
-                        Text(formatDateTime(arrActual))
+                        Text(dateTimetoString(arrActual))
                       ],
                     ),
                     const SizedBox(height: 3.0),
@@ -221,21 +241,21 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                     Row(
                       children: [
                         const Text("Time: "),
-                        Text(formatDateTime(depTime))
+                        Text(dateTimetoString(depTime))
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Estimated: "),
-                        Text(formatDateTime(depEstimated))
+                        Text(dateTimetoString(depEstimated))
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Actual: "),
-                        Text(formatDateTime(depActual))
+                        Text(dateTimetoString(depActual))
                       ],
                     ),
                     const SizedBox(height: 3.0),

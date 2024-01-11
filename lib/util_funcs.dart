@@ -1,13 +1,10 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:hive/hive.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import 'response/airport_schedule.dart';
-
-String formatDateTime(String inputDateTime) {
+String dateTimetoString(String inputDateTime) {
   if (inputDateTime == "[Unavailable]") {
     return inputDateTime;
   }
@@ -34,6 +31,18 @@ String formatDateTime(String inputDateTime) {
   return '$formattedTime, $formattedDate';
 }
 
+DateTime stringToDateTime(String dateString) {
+  try {
+    // Parse the string into a DateTime object
+    DateTime dateTime = DateTime.parse(dateString);
+    return dateTime;
+  } catch (e) {
+    // Handle parsing errors
+    print('Error converting string to DateTime: $e');
+    return DateTime.now(); // Return current time if there's an error
+  }
+}
+
 class LocalNotifications {
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -51,8 +60,8 @@ class LocalNotifications {
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-            onDidReceiveLocalNotification: (id, title, body, payload) => null);
-    final LinuxInitializationSettings initializationSettingsLinux =
+            onDidReceiveLocalNotification: (id, title, body, payload) {});
+    const LinuxInitializationSettings initializationSettingsLinux =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
     final InitializationSettings initializationSettings =
         InitializationSettings(
@@ -136,40 +145,4 @@ class LocalNotifications {
   static Future stopAllNotification() async {
     await _flutterLocalNotificationsPlugin.cancelAll();
   }
-}
-
-// Save list to local storage using Hive
-Future<void> saveFlightDetails(FlightDetails flightDetails, bool isArr) async {
-  final box = await Hive.openBox<FlightDetails>(
-      isArr ? 'arrivalFlightBox' : 'departureFlightBox');
-  await box.add(flightDetails);
-}
-
-// Retrieve list from local storage using Hive
-Future<List<FlightDetails>> getReminders(bool isArr) async {
-  final box = await Hive.openBox<FlightDetails>(
-      isArr ? 'arrivalFlightBox' : 'departureFlightBox');
-  return box.values.toList();
-}
-
-// Delete a specific flight detail from local storage using Hive
-Future<void> deleteReminder(String flightIata, bool isArr) async {
-  final box = await Hive.openBox<FlightDetails>(
-      isArr ? 'arrivalFlightBox' : 'departureFlightBox');
-
-  // Find the index of the flight detail with the specified flightIata
-  final index = box.values.toList().indexWhere(
-      (flight) => flight.flightIata != null && flight.flightIata == flightIata);
-
-  // If found, delete the flight detail at the specified index
-  if (index != -1) {
-    await box.deleteAt(index);
-  }
-}
-
-// Delete all flight details from local storage using Hive
-Future<void> deleteAllReminder(bool isArr) async {
-  final box = await Hive.openBox<FlightDetails>(
-      isArr ? 'arrivalFlightBox' : 'departureFlightBox');
-  await box.clear();
 }

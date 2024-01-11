@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import '../database_helper.dart';
+import '../hive_funcs.dart';
+import '../response/airport_schedule.dart';
 import '../util_funcs.dart';
 import '../response/flight_details.dart';
 import '../service/airlabs_request.dart';
 
 class FlightDepDetails extends StatefulWidget {
   final String flightIata;
+  final FlightDetails forReminder;
 
   const FlightDepDetails({
     Key? key,
     required this.flightIata,
+    required this.forReminder,
   }) : super(key: key);
 
   @override
@@ -47,6 +54,20 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
               title: Text("Departing Flight"),
               pinned: true,
               floating: true,
+              actions: [
+                IconButton(
+                    onPressed: () async {
+                      await DatabaseHelper.instance
+                          .insertFlightDetails('depNotif', widget.forReminder);
+                      showTopSnackBar(
+                        Overlay.of(context),
+                        CustomSnackBar.success(
+                          message: "Departing Flight added to Reminder",
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.notification_add))
+              ],
             ),
           ];
         },
@@ -169,21 +190,21 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
                     Row(
                       children: [
                         const Text("Time: "),
-                        Text(formatDateTime(depTime))
+                        Text(dateTimetoString(depTime))
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Estimated: "),
-                        Text(formatDateTime(depEstimated))
+                        Text(dateTimetoString(depEstimated))
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Actual: "),
-                        Text(formatDateTime(depActual))
+                        Text(dateTimetoString(depActual))
                       ],
                     ),
                     const SizedBox(height: 3.0),

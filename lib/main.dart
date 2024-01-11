@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'database_helper.dart';
 import 'ui/home_screen.dart';
 import 'util_funcs.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper.instance.database;
+
   await LocalNotifications.init();
+  // Get the application documents directory
+  final appDocumentDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
+
+  // Set the Hive database location
+  await Hive.initFlutter();
+  await BoxCollection.open(
+      'ReminderList', {'arrivalFlightBox', 'departureFlightBox'},
+      path: appDocumentDirectory.path);
   runApp(const MyApp());
 }
 
