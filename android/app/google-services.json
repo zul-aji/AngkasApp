@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "597647810127",
+    "project_id": "angkasapp-f4f21",
+    "storage_bucket": "angkasapp-f4f21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597647810127:android:b422da620ea33fac5b543a",
+        "android_client_info": {
+          "package_name": "com.zulu.angkasapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRs625IWholAMY7v8tVQ_B0ANwe5XqJko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

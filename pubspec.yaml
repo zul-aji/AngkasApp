@@ -1,0 +1,48 @@
+name: angkasapp
+description: "A new Flutter project."
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0-43.0.dev <4.0.0'
+
+dependencies:
+  http: ^1.1.2
+  tuple: 2.0.2
+  image: ^3.0.1
+  intl: ^0.17.0
+  flutter:
+    sdk: flutter
+  flutter_image: 4.1.9
+  country_flags: ^2.1.1
+  flutter_local_notifications: ^16.3.0
+  flutter_timezone: ^1.0.8
+  rxdart: ^0.27.7
+  hive: ^2.2.3
+
+  cupertino_icons: ^1.0.2
+  flutter_map: ^6.0.1
+  latlong2: ^0.9.0
+  timezone: ^0.9.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+  - assets/T1_L1.jpg
+  - assets/T1_L2.jpg
+  - assets/T2_L1.jpg
+  - assets/T2_L1_RE.jpg
+  - assets/T2_L2.jpg
+  - assets/T3_1_Arrival.jpg
+  - assets/T3_2_BoardingLounge.jpg
+  - assets/T3_3_CheckInArea.jpg
+  - assets/T3_4_GedungParkir&ExhibitionHallDomestic_M.jpg
+  - assets/T3_5_GedungParkir&ExhibitionHallInternational.jpg
