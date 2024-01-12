@@ -12,11 +12,13 @@ import '../service/airlabs_request.dart';
 class FlightDepDetails extends StatefulWidget {
   final String flightIata;
   final FlightDetails forReminder;
+  final bool isArr;
 
   const FlightDepDetails({
     Key? key,
     required this.flightIata,
     required this.forReminder,
+    required this.isArr,
   }) : super(key: key);
 
   @override
@@ -57,8 +59,10 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
               actions: [
                 IconButton(
                     onPressed: () async {
-                      await DatabaseHelper.instance
-                          .insertFlightDetails('depNotif', widget.forReminder);
+                      await saveReminder(
+                        widget.forReminder,
+                        widget.isArr,
+                      );
                       showTopSnackBar(
                         Overlay.of(context),
                         CustomSnackBar.success(

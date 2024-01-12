@@ -36,11 +36,11 @@ class ScheduleListView extends StatelessWidget {
                   ? FlightArrDetails(
                       flightIata: flightIata,
                       forReminder: _scheduleList![index],
-                    )
+                      isArr: _isArr)
                   : FlightDepDetails(
                       flightIata: flightIata,
                       forReminder: _scheduleList![index],
-                    ),
+                      isArr: _isArr),
             ),
           ),
           child: Card(
@@ -153,11 +153,11 @@ class CustomSearchDelegate extends SearchDelegate {
                   ? FlightArrDetails(
                       flightIata: flightIata,
                       forReminder: matchQuery![index],
-                    )
+                      isArr: boolIsArr)
                   : FlightDepDetails(
                       flightIata: flightIata,
                       forReminder: matchQuery![index],
-                    ),
+                      isArr: boolIsArr),
             ),
           ),
           child: Card(

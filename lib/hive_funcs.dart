@@ -2,14 +2,17 @@
 import 'package:hive/hive.dart';
 
 import 'response/airport_schedule.dart';
+import 'util_funcs.dart';
 
-Future<void> saveReminder(FlightDetails flightDetails,
-    Duration expirationDuration, bool isArr) async {
+Future<void> saveReminder(FlightDetails flightDetails, bool isArr) async {
+  DateTime expireDateTime = stringToDateTime(isArr
+      ? flightDetails.arrTime ?? '[Unavailable]'
+      : flightDetails.depTime ?? '[Unavailable]');
   final box = await Hive.openBox<Map>(
       isArr ? 'arrivalFlightBox' : 'departureFlightBox');
 
   // Store the flight details along with the expiration time
-  final expirationTime = DateTime.now().add(expirationDuration);
+  final expirationTime = expireDateTime.add(const Duration(minutes: 10));
   final detailsWithExpiration = {
     'details': flightDetails.toJson(), // Convert FlightDetails to Map
     'expirationTime': expirationTime,

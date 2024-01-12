@@ -1,8 +1,18 @@
+import 'package:hive/hive.dart';
+
 import 'request_terms.dart';
 
-class AirportSchedule {
+part 'airport_schedule.g.dart';
+
+@HiveType(typeId: 0)
+class AirportSchedule extends HiveObject {
+  @HiveField(0)
   final Request request;
+
+  @HiveField(1)
   final List<FlightDetails> response;
+
+  @HiveField(2)
   final String terms;
 
   AirportSchedule({
@@ -22,35 +32,93 @@ class AirportSchedule {
   }
 }
 
-class FlightDetails {
+@HiveType(typeId: 1)
+class FlightDetails extends HiveObject {
+  @HiveField(0)
   final String? airlineIata;
+
+  @HiveField(1)
   final String? airlineIcao;
+
+  @HiveField(2)
   final String? flightIata;
+
+  @HiveField(3)
   final String? flightIcao;
+
+  @HiveField(4)
   final String? flightNumber;
+
+  @HiveField(5)
   final String? depIata;
+
+  @HiveField(6)
   final String? depIcao;
+
+  @HiveField(7)
   final String? depTerminal;
+
+  @HiveField(8)
   final String? depGate;
+
+  @HiveField(9)
   final String? depTime;
+
+  @HiveField(10)
   final String? depTimeUtc;
+
+  @HiveField(11)
   final String? arrIata;
+
+  @HiveField(12)
   final String? arrIcao;
+
+  @HiveField(13)
   final String? arrTerminal;
+
+  @HiveField(14)
   final String? arrGate;
+
+  @HiveField(15)
   final String? arrBaggage;
+
+  @HiveField(16)
   final String? arrTime;
+
+  @HiveField(17)
   final String? arrTimeUtc;
+
+  @HiveField(18)
   final String? csAirlineIata;
+
+  @HiveField(19)
   final String? csFlightNumber;
+
+  @HiveField(20)
   final String? csFlightIata;
+
+  @HiveField(21)
   final String? status;
+
+  @HiveField(22)
   final int? duration;
+
+  @HiveField(23)
   final int? delayed;
+
+  @HiveField(24)
   final int? depDelayed;
+
+  @HiveField(25)
   final int? arrDelayed;
+
+  @HiveField(26)
   final String? aircraftIcao;
+
+  @HiveField(27)
   final int? arrTimeTs;
+
+  @HiveField(28)
   final int? depTimeTs;
 
   FlightDetails({

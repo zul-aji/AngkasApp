@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../custom_widgets.dart';
 import '../database_helper.dart';
+import '../hive_funcs.dart';
 
 class ReminderList extends StatefulWidget {
   const ReminderList({super.key});
@@ -24,10 +25,8 @@ class _ReminderListState extends State<ReminderList>
   bool isArr = true;
 
   void getReminderList() async {
-    var _arrivalReminderList =
-        await DatabaseHelper.instance.getFlightDetails('arrNotif');
-    var _departureReminderList =
-        await DatabaseHelper.instance.getFlightDetails('depNotif');
+    var _arrivalReminderList = await getReminders(true);
+    var _departureReminderList = await getReminders(false);
     setState(() {
       arrivalReminderList = _arrivalReminderList;
       arrivalReminderlength = _arrivalReminderList.length;

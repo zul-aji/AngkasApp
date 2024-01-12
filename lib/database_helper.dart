@@ -53,6 +53,8 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
+    final path = join(await getDatabasesPath(), 'flight_details_database.db');
+    print('Database path: $path');
     return openDatabase(
       join(await getDatabasesPath(), 'flight_details_database.db'),
       onCreate: _onCreate,

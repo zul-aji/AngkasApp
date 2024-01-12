@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'database_helper.dart';
+import 'response/airport_schedule.dart';
 import 'ui/home_screen.dart';
 import 'util_funcs.dart';
 
@@ -16,6 +17,7 @@ void main() async {
 
   // Set the Hive database location
   await Hive.initFlutter();
+  Hive.registerAdapter(AirportScheduleAdapter());
   await BoxCollection.open(
       'ReminderList', {'arrivalFlightBox', 'departureFlightBox'},
       path: appDocumentDirectory.path);

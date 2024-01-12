@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import '../hive_funcs.dart';
 import '../response/airport_schedule.dart';
 import '../util_funcs.dart';
 import '../response/flight_details.dart';
@@ -11,11 +12,13 @@ import '../service/airlabs_request.dart';
 class FlightArrDetails extends StatefulWidget {
   final String flightIata;
   final FlightDetails forReminder;
+  final bool isArr;
 
   const FlightArrDetails({
     Key? key,
     required this.flightIata,
     required this.forReminder,
+    required this.isArr,
   }) : super(key: key);
 
   @override
@@ -59,8 +62,10 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
               actions: [
                 IconButton(
                     onPressed: () async {
-                      await DatabaseHelper.instance
-                          .insertFlightDetails('arrNotif', widget.forReminder);
+                      await saveReminder(
+                        widget.forReminder,
+                        widget.isArr,
+                      );
                       showTopSnackBar(
                         Overlay.of(context),
                         CustomSnackBar.success(
