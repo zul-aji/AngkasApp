@@ -1,9 +1,9 @@
-import 'package:angkasapp/response/airport_schedule.dart';
 import 'package:flutter/material.dart';
 
 import '../custom_widgets.dart';
 import '../database_helper.dart';
 import '../hive_funcs.dart';
+import '../response/schedule_flights.dart';
 
 class ReminderList extends StatefulWidget {
   const ReminderList({super.key});
@@ -15,8 +15,8 @@ class ReminderList extends StatefulWidget {
 class _ReminderListState extends State<ReminderList>
     with TickerProviderStateMixin {
   bool _isLoading = true;
-  List<FlightDetails>? arrivalReminderList;
-  List<FlightDetails>? departureReminderList;
+  List<ScheduleFlights>? arrivalReminderList;
+  List<ScheduleFlights>? departureReminderList;
   late TabController _tabController;
 
   int arrivalReminderlength = 0;

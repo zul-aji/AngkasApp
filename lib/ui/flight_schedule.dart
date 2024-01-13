@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../custom_widgets.dart';
-import '../response/airport_schedule.dart';
+import '../response/schedule_flights.dart';
 import '../service/airlabs_request.dart';
 
 class FlightSchedule extends StatefulWidget {
@@ -14,8 +14,8 @@ class FlightSchedule extends StatefulWidget {
 class _FlightScheduleState extends State<FlightSchedule>
     with TickerProviderStateMixin {
   bool _isLoading = true;
-  List<FlightDetails>? arrivalList;
-  List<FlightDetails>? departureList;
+  List<ScheduleFlights>? arrivalList;
+  List<ScheduleFlights>? departureList;
   late TabController _tabController;
   int arrivalLength = 0;
   int departureLength = 0;

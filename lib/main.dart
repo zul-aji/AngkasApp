@@ -1,26 +1,33 @@
+import 'package:angkasapp/response/schedule_flights.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'database_helper.dart';
-import 'response/airport_schedule.dart';
+import 'hive_funcs.dart';
 import 'ui/home_screen.dart';
-import 'util_funcs.dart';
+import 'local_notifications.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DatabaseHelper.instance.database;
 
+  // Request notification permissions
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestNotificationsPermission();
+
+  await DatabaseHelper.instance.database;
   await LocalNotifications.init();
-  // Get the application documents directory
-  final appDocumentDirectory =
-      await path_provider.getApplicationDocumentsDirectory();
 
   // Set the Hive database location
   await Hive.initFlutter();
-  Hive.registerAdapter(AirportScheduleAdapter());
-  await BoxCollection.open(
-      'ReminderList', {'arrivalFlightBox', 'departureFlightBox'},
-      path: appDocumentDirectory.path);
+  Hive.registerAdapter(ScheduleFlightsAdapter());
+  arrBox = await Hive.openBox<ScheduleFlightsAdapter>('arrivalFlightBox');
+  depBox = await Hive.openBox<ScheduleFlightsAdapter>('departureFlightBox');
+
   runApp(const MyApp());
 }
 

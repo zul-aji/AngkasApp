@@ -1,26 +1,26 @@
 import 'request_terms.dart';
 
-class AirportSchedule {
+class CurrentFlightDetails {
   final Request request;
-  final CurrentFlightDetails response;
+  final FlightDetails response;
   final String terms;
 
-  AirportSchedule({
+  CurrentFlightDetails({
     required this.request,
     required this.response,
     required this.terms,
   });
 
-  factory AirportSchedule.fromJson(Map<String, dynamic> json) {
-    return AirportSchedule(
+  factory CurrentFlightDetails.fromJson(Map<String, dynamic> json) {
+    return CurrentFlightDetails(
       request: Request.fromJson(json['request']),
-      response: CurrentFlightDetails.fromJson(json['response']),
+      response: FlightDetails.fromJson(json['response']),
       terms: json['terms'],
     );
   }
 }
 
-class CurrentFlightDetails {
+class FlightDetails {
   final String? aircraftIcao;
   final String? airlineIata;
   final String? airlineIcao;
@@ -71,7 +71,7 @@ class CurrentFlightDetails {
   final int? percent;
   final String? utc;
 
-  CurrentFlightDetails({
+  FlightDetails({
     this.aircraftIcao,
     this.airlineIata,
     this.airlineIcao,
@@ -123,8 +123,8 @@ class CurrentFlightDetails {
     this.utc,
   });
 
-  factory CurrentFlightDetails.fromJson(Map<String, dynamic> json) {
-    return CurrentFlightDetails(
+  factory FlightDetails.fromJson(Map<String, dynamic> json) {
+    return FlightDetails(
       aircraftIcao: json['aircraft_icao'],
       airlineIata: json['airline_iata'],
       airlineIcao: json['airline_icao'],

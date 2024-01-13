@@ -1,5 +1,5 @@
 import 'package:angkasapp/ui/reminder_list.dart';
-import 'package:angkasapp/util_funcs.dart';
+import 'package:angkasapp/local_notifications.dart';
 import 'package:flutter/material.dart';
 
 import 'find_flight.dart';

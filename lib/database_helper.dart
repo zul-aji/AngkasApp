@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'response/airport_schedule.dart';
-import 'util_funcs.dart';
+import 'response/schedule_flights.dart';
+import 'local_notifications.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -11,7 +11,7 @@ class DatabaseHelper {
 
   DatabaseHelper._privateConstructor();
 
-  static const String tableFlightDetails = 'flight_details';
+  static const String tableScheduleFlights = 'flight_details';
   static const String columnId = 'id';
   static const String columnListType = 'list_type';
   static const String columnExpiredAt = 'expired_at';
@@ -64,7 +64,7 @@ class DatabaseHelper {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE $tableFlightDetails (
+      CREATE TABLE $tableScheduleFlights (
         $columnId INTEGER PRIMARY KEY,
         $columnListType TEXT,
         $columnExpiredAt INTEGER,
@@ -101,39 +101,39 @@ class DatabaseHelper {
     ''');
   }
 
-  Future<int> insertFlightDetails(
-      String listType, FlightDetails flightDetails) async {
+  Future<int> insertScheduleFlights(
+      String listType, ScheduleFlights ScheduleFlights) async {
     Database db = await instance.database;
     DateTime dateTime = stringToDateTime(listType == 'arrNotif'
-        ? flightDetails.arrTime ?? '[Unavailable]'
-        : flightDetails.depTime ?? '[Unavailable]');
+        ? ScheduleFlights.arrTime ?? '[Unavailable]'
+        : ScheduleFlights.depTime ?? '[Unavailable]');
 
     print("data saved");
 
-    return await db.insert(tableFlightDetails, {
+    return await db.insert(tableScheduleFlights, {
       columnListType: listType,
       columnExpiredAt: dateTime.millisecondsSinceEpoch,
-      ...flightDetails.toMap(),
+      ...ScheduleFlights.toMap(),
     });
   }
 
-  Future<List<FlightDetails>> getFlightDetails(String listType) async {
+  Future<List<ScheduleFlights>> getScheduleFlights(String listType) async {
     Database db = await instance.database;
     final limitTime =
         DateTime.now().add(const Duration(minutes: 10)).millisecondsSinceEpoch;
 
     await db.delete(
-      tableFlightDetails,
+      tableScheduleFlights,
       where: '$columnListType = ? AND $columnExpiredAt <= ?',
       whereArgs: [listType, limitTime],
     );
 
-    List<Map<String, dynamic>> maps = await db.query(tableFlightDetails);
+    List<Map<String, dynamic>> maps = await db.query(tableScheduleFlights);
 
     print("data passed");
 
     return List.generate(maps.length, (i) {
-      return FlightDetails.fromMap(maps[i]);
+      return ScheduleFlights.fromMap(maps[i]);
     });
   }
 }

@@ -4,14 +4,14 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../database_helper.dart';
 import '../hive_funcs.dart';
-import '../response/airport_schedule.dart';
-import '../util_funcs.dart';
+import '../response/schedule_flights.dart';
+import '../local_notifications.dart';
 import '../response/flight_details.dart';
 import '../service/airlabs_request.dart';
 
 class FlightDepDetails extends StatefulWidget {
   final String flightIata;
-  final FlightDetails forReminder;
+  final ScheduleFlights forReminder;
   final bool isArr;
 
   const FlightDepDetails({
@@ -27,27 +27,27 @@ class FlightDepDetails extends StatefulWidget {
 
 class _FlightDepDetailsState extends State<FlightDepDetails> {
   bool _isLoading = true;
-  CurrentFlightDetails? flightDetails;
+  FlightDetails? scheduleFlights;
 
-  void getFlightDetails() async {
-    var _flightDetails = await API.getFlightDetail(widget.flightIata);
+  void getScheduleFlights() async {
+    var _scheduleFlights = await API.getFlightDetail(widget.flightIata);
     setState(() {
-      flightDetails = _flightDetails;
+      scheduleFlights = _scheduleFlights;
       _isLoading = false;
     });
   }
 
   @override
   void initState() {
-    getFlightDetails();
+    getScheduleFlights();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    String depTime = flightDetails?.depTime ?? "[Unavailable]";
-    String depEstimated = flightDetails?.depEstimated ?? "[Unavailable]";
-    String depActual = flightDetails?.depActual ?? "[Unavailable]";
+    String depTime = scheduleFlights?.depTime ?? "[Unavailable]";
+    String depEstimated = scheduleFlights?.depEstimated ?? "[Unavailable]";
+    String depActual = scheduleFlights?.depActual ?? "[Unavailable]";
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -59,10 +59,10 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
               actions: [
                 IconButton(
                     onPressed: () async {
-                      await saveReminder(
-                        widget.forReminder,
-                        widget.isArr,
-                      );
+                      LocalNotifications.showScheduledNotification(
+                          title: scheduleFlights?.flightIata ?? "[unavailable]",
+                          body: 'flight is arriving',
+                          payload: 'payload');
                       showTopSnackBar(
                         Overlay.of(context),
                         CustomSnackBar.success(
@@ -89,7 +89,7 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
                     Row(
                       children: [
                         Image.network(
-                          "https://airlabs.co/img/airline/m/${flightDetails!.airlineIata}.png",
+                          "https://airlabs.co/img/airline/m/${scheduleFlights!.airlineIata}.png",
                           errorBuilder: (context, error, stackTrace) {
                             // This function will be called if the image fails to load
                             return Icon(
@@ -103,7 +103,8 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              flightDetails!.airlineName ?? "[Name Unavailble]",
+                              scheduleFlights!.airlineName ??
+                                  "[Name Unavailble]",
                               style: const TextStyle(fontSize: 20),
                             ),
                             Text(widget.flightIata)
@@ -121,7 +122,7 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text("From: "),
-                              Text(flightDetails!.depName ??
+                              Text(scheduleFlights!.depName ??
                                   "[Departure Airport Unavailable]")
                             ],
                           ),
@@ -132,7 +133,7 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text("To: "),
-                              Text(flightDetails!.arrName ??
+                              Text(scheduleFlights!.arrName ??
                                   "[Arrival Airport Unavailable]")
                             ],
                           ),
@@ -150,7 +151,7 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text("Status: "),
-                              Text(flightDetails!.status ??
+                              Text(scheduleFlights!.status ??
                                   "[Flight Status Unavailable]")
                             ],
                           ),
@@ -162,9 +163,9 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
                             children: [
                               const Text("Duration: "),
                               Text(
-                                flightDetails!.duration == null
+                                scheduleFlights!.duration == null
                                     ? "[Unavailable]"
-                                    : flightDetails!.duration.toString(),
+                                    : scheduleFlights!.duration.toString(),
                               )
                             ],
                           ),
@@ -180,14 +181,14 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
                     Row(
                       children: [
                         const Text("Terminal: "),
-                        Text(flightDetails!.depTerminal ?? "[Unavailable]")
+                        Text(scheduleFlights!.depTerminal ?? "[Unavailable]")
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Gate: "),
-                        Text(flightDetails!.depGate ?? "[Unavailable]")
+                        Text(scheduleFlights!.depGate ?? "[Unavailable]")
                       ],
                     ),
                     const SizedBox(height: 3.0),
@@ -215,9 +216,9 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
                     Row(
                       children: [
                         const Text("Delayed: "),
-                        Text(flightDetails!.depDelayed == null
+                        Text(scheduleFlights!.depDelayed == null
                             ? "[Unavailable]"
-                            : "${flightDetails!.depDelayed.toString()} Minutes")
+                            : "${scheduleFlights!.depDelayed.toString()} Minutes")
                       ],
                     ),
                     const SizedBox(height: 5.0),

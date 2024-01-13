@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-import 'response/airport_schedule.dart';
+import 'response/schedule_flights.dart';
 import 'ui/flight_arr_details.dart';
 import 'ui/flight_dep_details.dart';
-import 'util_funcs.dart';
+import 'local_notifications.dart';
 
 class ScheduleListView extends StatelessWidget {
   const ScheduleListView({
     super.key,
-    required List<FlightDetails>? scheduleList,
+    required List<ScheduleFlights>? scheduleList,
     required int scheduleLength,
     required bool isArr,
   })  : _scheduleList = scheduleList,
         _scheduleLength = scheduleLength,
         _isArr = isArr;
 
-  final List<FlightDetails>? _scheduleList;
+  final List<ScheduleFlights>? _scheduleList;
   final int _scheduleLength;
   final bool _isArr;
 
@@ -85,7 +85,7 @@ class ScheduleListView extends StatelessWidget {
 }
 
 class CustomSearchDelegate extends SearchDelegate {
-  List<FlightDetails>? flightList;
+  List<ScheduleFlights>? flightList;
   bool boolIsArr;
 
   CustomSearchDelegate({
@@ -117,18 +117,18 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    List<FlightDetails>? matchQuery = _filterResults();
+    List<ScheduleFlights>? matchQuery = _filterResults();
     return _buildResultListView(matchQuery);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<FlightDetails>? matchQuery = _filterResults();
+    List<ScheduleFlights>? matchQuery = _filterResults();
     return _buildResultListView(matchQuery);
   }
 
-  List<FlightDetails>? _filterResults() {
-    List<FlightDetails>? matchQuery = [];
+  List<ScheduleFlights>? _filterResults() {
+    List<ScheduleFlights>? matchQuery = [];
     for (var flight in flightList!) {
       if (_isMatch(flight)) {
         matchQuery.add(flight);
@@ -137,7 +137,7 @@ class CustomSearchDelegate extends SearchDelegate {
     return matchQuery;
   }
 
-  Widget _buildResultListView(List<FlightDetails>? matchQuery) {
+  Widget _buildResultListView(List<ScheduleFlights>? matchQuery) {
     return ListView.builder(
       itemCount: matchQuery?.length ?? 0,
       itemBuilder: (context, index) {
@@ -200,7 +200,7 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
-  bool _isMatch(FlightDetails flight) {
+  bool _isMatch(ScheduleFlights flight) {
     return (flight.flightIata != null &&
             flight.flightIata!.toLowerCase().contains(query.toLowerCase())) ||
         (flight.flightIcao != null &&

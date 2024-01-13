@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../const.dart';
 import '../response/airline_details.dart';
-import '../response/airport_schedule.dart';
 import '../response/flight_details.dart';
+import '../response/schedule_flights.dart';
 
 class API {
-  static Future<List<FlightDetails>?> getArrDep(bool isArr) async {
-    List<FlightDetails>? flightDetails;
+  static Future<List<ScheduleFlights>?> getArrDep(bool isArr) async {
+    List<ScheduleFlights>? scheduleFlights;
     String isDep = isArr ? 'arr_iata' : 'dep_iata';
 
     final Uri url = Uri.parse('${Const.baseAirlabsURL}/schedules');
@@ -23,11 +23,11 @@ class API {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
       final List<dynamic> responseList = data['response'];
-      flightDetails = responseList
-          .map((flightJson) => FlightDetails.fromJson(flightJson))
+      scheduleFlights = responseList
+          .map((flightJson) => ScheduleFlights.fromJson(flightJson))
           .toList();
 
-      return flightDetails;
+      return scheduleFlights;
     } else {
       throw Exception('Failed to load data');
     }
@@ -59,9 +59,8 @@ class API {
     }
   }
 
-  static Future<CurrentFlightDetails?> getFlightDetail(
-      String flightIata) async {
-    CurrentFlightDetails? currentFlightDetails;
+  static Future<FlightDetails?> getFlightDetail(String flightIata) async {
+    FlightDetails? flightDetails;
 
     final Uri url = Uri.parse('${Const.baseAirlabsURL}/flight');
 
@@ -76,9 +75,9 @@ class API {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
       final Map<String, dynamic> responseData = data['response'];
-      currentFlightDetails = CurrentFlightDetails.fromJson(responseData);
+      flightDetails = FlightDetails.fromJson(responseData);
 
-      return currentFlightDetails;
+      return flightDetails;
     } else {
       throw Exception('Failed to load data');
     }

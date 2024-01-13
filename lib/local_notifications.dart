@@ -89,6 +89,7 @@ class LocalNotifications {
         NotificationDetails(android: androidNotificationDetails);
     await _flutterLocalNotificationsPlugin
         .show(0, title, body, notificationDetails, payload: payload);
+    print('notif made');
   }
 
   //to show periodic notif
@@ -128,12 +129,13 @@ class LocalNotifications {
         3,
         title,
         body,
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        tz.TZDateTime.now(tz.local).add(const Duration(minutes: 1)),
         notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         payload: payload);
+    print('notif made');
   }
 
   //close a specific channel notif

@@ -1,62 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'airport_schedule.dart';
+part of 'schedule_flights.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class AirportScheduleAdapter extends TypeAdapter<AirportSchedule> {
+class ScheduleFlightsAdapter extends TypeAdapter<ScheduleFlights> {
   @override
   final int typeId = 0;
 
   @override
-  AirportSchedule read(BinaryReader reader) {
+  ScheduleFlights read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return AirportSchedule(
-      request: fields[0] as Request,
-      response: (fields[1] as List).cast<FlightDetails>(),
-      terms: fields[2] as String,
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, AirportSchedule obj) {
-    writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.request)
-      ..writeByte(1)
-      ..write(obj.response)
-      ..writeByte(2)
-      ..write(obj.terms);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AirportScheduleAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class FlightDetailsAdapter extends TypeAdapter<FlightDetails> {
-  @override
-  final int typeId = 1;
-
-  @override
-  FlightDetails read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return FlightDetails(
+    return ScheduleFlights(
       airlineIata: fields[0] as String?,
       airlineIcao: fields[1] as String?,
       flightIata: fields[2] as String?,
@@ -90,7 +50,7 @@ class FlightDetailsAdapter extends TypeAdapter<FlightDetails> {
   }
 
   @override
-  void write(BinaryWriter writer, FlightDetails obj) {
+  void write(BinaryWriter writer, ScheduleFlights obj) {
     writer
       ..writeByte(29)
       ..writeByte(0)
@@ -159,32 +119,7 @@ class FlightDetailsAdapter extends TypeAdapter<FlightDetails> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FlightDetailsAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class FlightDetailsAdapterAdapter extends TypeAdapter<FlightDetailsAdapter> {
-  @override
-  final int typeId = 0;
-
-  @override
-  FlightDetailsAdapter read(BinaryReader reader) {
-    return FlightDetailsAdapter();
-  }
-
-  @override
-  void write(BinaryWriter writer, FlightDetailsAdapter obj) {
-    writer.writeByte(0);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is FlightDetailsAdapterAdapter &&
+      other is ScheduleFlightsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
