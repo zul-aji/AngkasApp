@@ -7,7 +7,7 @@ import 'image_size.dart';
 
 Future<img.Image?> loadImage(String path) async {
   // Load the image from the given path
-  ImageDetail imageDetail = await getImageDimensions(Const.pT2L1r);
+  ImageDetail imageDetail = await getImageDimensions(pT2L1r);
   return img.decodeImage(Uint8List.fromList(imageDetail.bytes!));
 }
 

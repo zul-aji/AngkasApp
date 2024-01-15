@@ -31,7 +31,7 @@ String dateTimetoString(String inputDateTime) {
   return '$formattedTime, $formattedDate';
 }
 
-DateTime stringToDateTime(String dateString) {
+stringToDateTime(String dateString) {
   try {
     // Parse the string into a DateTime object
     DateTime dateTime = DateTime.parse(dateString);
@@ -39,7 +39,7 @@ DateTime stringToDateTime(String dateString) {
   } catch (e) {
     // Handle parsing errors
     print('Error converting string to DateTime: $e');
-    return DateTime.now(); // Return current time if there's an error
+    return "[Unavailable]"; // Return current time if there's an error
   }
 }
 
@@ -80,7 +80,7 @@ class LocalNotifications {
     required String payload,
   }) async {
     const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('channel 1', 'your channel name',
+        AndroidNotificationDetails('Simple', 'your channel name',
             channelDescription: 'your channel description',
             importance: Importance.max,
             priority: Priority.high,
@@ -92,33 +92,18 @@ class LocalNotifications {
     print('notif made');
   }
 
-  //to show periodic notif
-  static Future showPeriodicNotification({
-    required String title,
-    required String body,
-    required String payload,
-  }) async {
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('channel 2', 'your channel name',
-            channelDescription: 'your channel description',
-            importance: Importance.max,
-            priority: Priority.high,
-            ticker: 'ticker');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-    await _flutterLocalNotificationsPlugin.periodicallyShow(
-        2, title, body, RepeatInterval.everyMinute, notificationDetails);
-  }
-
   //to show scheduled notif
   static Future showScheduledNotification({
     required String title,
     required String body,
     required String payload,
+    required tz.TZDateTime flightTime,
+    required bool isArr,
+    required int id,
   }) async {
     tz.initializeTimeZones();
     const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('channel 3', 'your channel name',
+        AndroidNotificationDetails('Schedule', 'your channel name',
             channelDescription: 'your channel description',
             importance: Importance.max,
             priority: Priority.high,
@@ -126,11 +111,7 @@ class LocalNotifications {
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await _flutterLocalNotificationsPlugin.zonedSchedule(
-        3,
-        title,
-        body,
-        tz.TZDateTime.now(tz.local).add(const Duration(minutes: 1)),
-        notificationDetails,
+        3, title, body, flightTime, notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,

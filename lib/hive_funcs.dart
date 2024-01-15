@@ -1,11 +1,12 @@
 // Save flight details to local storage using Hive with an expiration time
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive_ui/boxes_list.dart';
 
-import 'response/airport_schedule.dart';
 import 'response/schedule_flights.dart';
 import 'local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 late Box arrBox;
 late Box depBox;
@@ -16,100 +17,92 @@ Future<void> saveReminder(ScheduleFlights scheduleFlights, bool isArr) async {
       ? scheduleFlights.arrTime ?? '[Unavailable]'
       : scheduleFlights.depTime ?? '[Unavailable]');
 
-  // Store the flight details along with the expiration time
-  final expirationTime =
-      expireDateTime.add(const Duration(minutes: 10)).millisecondsSinceEpoch;
+  final details = {'details': scheduleFlights.toMap()};
 
-  var scheduleFlightsList = ScheduleFlights()
-    ..aircraftIata = scheduleFlights.airlineIata
-    ..aircraftIcao = scheduleFlights.airlineIcao
-    ..flightIata = scheduleFlights.flightIata
-    ..flightIcao = scheduleFlights.flightIcao
-    ..flightNumber = scheduleFlights.flightNumber
-    ..depIata = scheduleFlights.depIata
-    ..depIcao = scheduleFlights.depIcao
-    ..depTerminal = scheduleFlights.depTerminal
-    ..depGate = scheduleFlights.depGate
-    ..depTime = scheduleFlights.depTime
-    ..depTimeUtc = scheduleFlights.depTimeUtc
-    ..arrIata = scheduleFlights.arrIata
-    ..arrIcao = scheduleFlights.arrIcao
-    ..arrTerminal = scheduleFlights.arrTerminal
-    ..arrGate = scheduleFlights.arrGate
-    ..arrBaggage = scheduleFlights.arrBaggage
-    ..arrTime = scheduleFlights.arrTime
-    ..arrTimeUtc = scheduleFlights.arrTimeUtc
-    ..csAirlineIata = scheduleFlights.csAirlineIata
-    ..csFlightNumber = scheduleFlights.csFlightNumber
-    ..csFlightIata = scheduleFlights.csFlightIata
-    ..status = scheduleFlights.status
-    ..duration = scheduleFlights.duration
-    ..delayed = scheduleFlights.delayed
-    ..depDelayed = scheduleFlights.depDelayed
-    ..arrDelayed = scheduleFlights.arrDelayed
-    ..aircraftIcao = scheduleFlights.aircraftIcao
-    ..arrTimeTs = scheduleFlights.arrTimeTs
-    ..depTimeTs = scheduleFlights.depTimeTs;
+  // var scheduleFlightsList = ScheduleFlights()
+  //   ..aircraftIata = scheduleFlights.airlineIata
+  //   ..aircraftIcao = scheduleFlights.airlineIcao
+  //   ..flightIata = scheduleFlights.flightIata
+  //   ..flightIcao = scheduleFlights.flightIcao
+  //   ..flightNumber = scheduleFlights.flightNumber
+  //   ..depIata = scheduleFlights.depIata
+  //   ..depIcao = scheduleFlights.depIcao
+  //   ..depTerminal = scheduleFlights.depTerminal
+  //   ..depGate = scheduleFlights.depGate
+  //   ..depTime = scheduleFlights.depTime
+  //   ..depTimeUtc = scheduleFlights.depTimeUtc
+  //   ..arrIata = scheduleFlights.arrIata
+  //   ..arrIcao = scheduleFlights.arrIcao
+  //   ..arrTerminal = scheduleFlights.arrTerminal
+  //   ..arrGate = scheduleFlights.arrGate
+  //   ..arrBaggage = scheduleFlights.arrBaggage
+  //   ..arrTime = scheduleFlights.arrTime
+  //   ..arrTimeUtc = scheduleFlights.arrTimeUtc
+  //   ..csAirlineIata = scheduleFlights.csAirlineIata
+  //   ..csFlightNumber = scheduleFlights.csFlightNumber
+  //   ..csFlightIata = scheduleFlights.csFlightIata
+  //   ..status = scheduleFlights.status
+  //   ..duration = scheduleFlights.duration
+  //   ..delayed = scheduleFlights.delayed
+  //   ..depDelayed = scheduleFlights.depDelayed
+  //   ..arrDelayed = scheduleFlights.arrDelayed
+  //   ..aircraftIcao = scheduleFlights.aircraftIcao
+  //   ..arrTimeTs = scheduleFlights.arrTimeTs
+  //   ..depTimeTs = scheduleFlights.depTimeTs;
 
-  print(scheduleFlightsList.toString());
-  await box.add(scheduleFlightsList);
-  await box.add(expirationTime);
+  print(details.toString());
+  await box.add(details);
+  Fluttertoast.showToast(
+    msg: isArr
+        ? 'Flight is added to notification list, You will be notified near flight arrival'
+        : 'Flight is added to notification list, You will be notified near flight departure',
+  );
 }
 
 // Retrieve non-expired flight details from local storage using Hive
-Future<List<ScheduleFlights>> getReminders(bool isArr) async {
+List<ScheduleFlights> getReminders(bool isArr) {
   final box = isArr ? arrBox : depBox;
 
-  // Get the current time
-  final currentTime = DateTime.now();
+  // Get all entries in the box
+  final allEntries = box.values.toList();
+
+  // Map the details and create ScheduleFlights objects
+  final scheduleFlightsList = allEntries
+      .map((entry) => ScheduleFlights.fromMap(entry['details']))
+      .toList();
+
+  // Filter out expired entries
+  final nonExpiredEntries = scheduleFlightsList.where((entry) {
+    DateTime expirationTime =
+        stringToDateTime(entry.arrTime ?? '[Unavailable]');
+    bool isExpired =
+        expirationTime.isBefore(DateTime.now().add(Duration(minutes: 10)));
+    if (isExpired) {
+      // Delete the expired entry from the Hive box
+      box.deleteAt(allEntries.indexOf(entry));
+    }
+    return !isExpired;
+  }).toList();
+
+  return nonExpiredEntries;
+}
+
+bool checkCurrentFlight(String flightIata, bool isArr) {
+  final box = isArr ? arrBox : depBox;
 
   // Get all entries in the box
-  final allEntries = await box.get('');
-  print(allEntries);
+  final allEntries = box.values.toList();
 
-  // Filter out entries that have expired
-  final validEntries = <ScheduleFlights>[];
-  for (var entry in allEntries) {
-    // final expirationTime = DateTime.parse(entry['expirationTime']);
-    // if (expirationTime.isAfter(currentTime)) {
-    // Entry is still valid, add to the list
-    final detailsMap = entry['details'];
-    final scheduleFlights = ScheduleFlights.fromJson(detailsMap);
-    validEntries.add(scheduleFlights);
-    //   } else {
-    //     // Entry has expired, remove it from the box
-    //     await box.delete(entry.key);
-    //   }
-  }
+  // Check if flightIata is present in any of the entries
+  return allEntries.any((entry) {
+    final details = entry['details'];
+    final scheduleFlight = ScheduleFlights.fromMap(details);
 
-  return validEntries;
+    // Assuming flightIata is a property in ScheduleFlights class
+    return scheduleFlight.flightIata == flightIata;
+  });
 }
 
-Future<List<ScheduleFlights>> getReminder(bool isArr) async {
-  final box = await Hive.openBox<Map>(
-      isArr ? 'arrivalFlightBox' : 'departureFlightBox');
-  final currentTime = DateTime.now();
-
-  final nonExpiredDetails = box.values.where((dynamic details) {
-    if (details is Map<String, dynamic>) {
-      final expirationTime = details['expirationTime'] as DateTime;
-      return expirationTime.isAfter(currentTime);
-    }
-    return false;
-  }).toList();
-
-  // Convert the Map data back to FlightDetails
-  final flightDetailsList =
-      nonExpiredDetails.map<ScheduleFlights>((dynamic details) {
-    if (details is Map<String, dynamic>) {
-      return ScheduleFlights.fromJson(
-          details['details'] as Map<String, dynamic>);
-    }
-    throw Exception('Unexpected type encountered when processing reminders.');
-  }).toList();
-
-  return flightDetailsList;
-}
 
 // Delete a specific flight detail from local storage using Hive
 Future<void> deleteReminder(String flightIata, bool isArr) async {

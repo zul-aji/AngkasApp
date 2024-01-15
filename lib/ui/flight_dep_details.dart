@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:timezone/timezone.dart';
 
-import '../database_helper.dart';
-import '../hive_funcs.dart';
 import '../response/schedule_flights.dart';
 import '../local_notifications.dart';
 import '../response/flight_details.dart';
 import '../service/airlabs_request.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 class FlightDepDetails extends StatefulWidget {
   final String flightIata;
@@ -59,16 +58,30 @@ class _FlightDepDetailsState extends State<FlightDepDetails> {
               actions: [
                 IconButton(
                     onPressed: () async {
-                      LocalNotifications.showScheduledNotification(
-                          title: scheduleFlights?.flightIata ?? "[unavailable]",
-                          body: 'flight is arriving',
-                          payload: 'payload');
-                      showTopSnackBar(
-                        Overlay.of(context),
-                        CustomSnackBar.success(
-                          message: "Departing Flight added to Reminder",
-                        ),
-                      );
+                      tz.initializeTimeZones();
+                      DateTime flightDateTime = stringToDateTime(depTime);
+                      TZDateTime jakartaTime =
+                          TZDateTime.now(getLocation('Asia/Jakarta'));
+                      if (depTime == "[Unavailable]") {
+                        Fluttertoast.showToast(
+                          msg: 'Arrival time is unavailable',
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                        );
+                      } else if (flightDateTime.isBefore(jakartaTime)) {
+                        Fluttertoast.showToast(
+                          msg: 'Flight have departed from Soekarno-Hatta',
+                        );
+                      } else {
+                        LocalNotifications.showScheduledNotification(
+                          title: scheduleFlights?.flightIata ??
+                              'Flight code unavailable',
+                          body: 'flight is departing',
+                          payload: 'payload',
+                          flightTime: depTime,
+                          isArr: false,
+                        );
+                      }
                     },
                     icon: Icon(Icons.notification_add))
               ],

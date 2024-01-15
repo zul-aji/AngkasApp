@@ -1,13 +1,14 @@
-import 'package:angkasapp/database_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+import '../const.dart';
 import '../hive_funcs.dart';
 import '../response/schedule_flights.dart';
 import '../local_notifications.dart';
 import '../response/flight_details.dart';
 import '../service/airlabs_request.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class FlightArrDetails extends StatefulWidget {
   final String flightIata;
@@ -27,6 +28,7 @@ class FlightArrDetails extends StatefulWidget {
 
 class _FlightArrDetailsState extends State<FlightArrDetails> {
   bool _isLoading = true;
+  bool _isInReminder = false;
   FlightDetails? scheduleFlights;
 
   void getScheduleFlights() async {
@@ -40,6 +42,7 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
   @override
   void initState() {
     getScheduleFlights();
+    _isInReminder = checkCurrentFlight(widget.flightIata, true);
     super.initState();
   }
 
@@ -61,13 +64,48 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
               floating: true,
               actions: [
                 IconButton(
-                    onPressed: () async {
-                      LocalNotifications.showScheduledNotification(
-                          title: scheduleFlights?.flightIata ?? "[unavailable]",
-                          body: 'flight is arriving',
-                          payload: 'payload');
-                    },
-                    icon: Icon(Icons.notification_add))
+                  onPressed: () async {
+                    tz.initializeTimeZones();
+                    DateTime flightDateTime = stringToDateTime(arrTime);
+                    if (arrTime == "[Unavailable]") {
+                      Fluttertoast.showToast(
+                        msg: 'Arrival time is unavailable',
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                      );
+                    } else if (flightDateTime.isBefore(jakartaTime)) {
+                      Fluttertoast.showToast(
+                        msg: 'Flight has arrived at Soekarno-Hatta',
+                      );
+                    } else {
+                      _isInReminder
+                          ? {
+                            LocalNotifications.showScheduledNotification(
+                                title: widget.flightIata,
+                                body: 'flight is arriving',
+                                payload: 'payload',
+                                flightTime:
+                                    tz.TZDateTime.from(flightDateTime, jakLoc),
+                                isArr: true,
+                              ),
+                              saveReminder(widget.forReminder, true)
+                          }
+                          : {
+                              LocalNotifications.showScheduledNotification(
+                                title: widget.flightIata,
+                                body: 'flight is arriving',
+                                payload: 'payload',
+                                flightTime:
+                                    tz.TZDateTime.from(flightDateTime, jakLoc),
+                                isArr: true,
+                                id: 
+                              ),
+                              saveReminder(widget.forReminder, true)
+                            };
+                    }
+                  },
+                  icon: Icon(Icons.notification_add),
+                )
               ],
             ),
           ];

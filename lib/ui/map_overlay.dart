@@ -60,7 +60,7 @@ class MapOverlay extends StatelessWidget {
                   children: [
                     // Image.asset(Const.pT2L1r),
                     FutureBuilder<Uint8List>(
-                      future: getResizedImageData(Const.pT2L1r),
+                      future: getResizedImageData(pT2L1r),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           return Image.memory(
@@ -74,7 +74,7 @@ class MapOverlay extends StatelessWidget {
                       },
                     ),
                     FutureBuilder<DotMap>(
-                      future: createDotMap(Const.pT2L1r),
+                      future: createDotMap(pT2L1r),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           return CustomPaint(
@@ -91,7 +91,7 @@ class MapOverlay extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                printNumberOfOnes(await setMapList(Const.pT2L1r));
+                printNumberOfOnes(await setMapList(pT2L1r));
               },
               child: Text('test'),
             ),

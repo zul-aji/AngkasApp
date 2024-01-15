@@ -1,94 +1,34 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-part 'schedule_flights.g.dart';
-
-@HiveType(typeId: 0)
 class ScheduleFlights extends HiveObject {
-  @HiveField(0)
   String? airlineIata;
-
-  @HiveField(1)
   String? airlineIcao;
-
-  @HiveField(2)
   String? flightIata;
-
-  @HiveField(3)
   String? flightIcao;
-
-  @HiveField(4)
   String? flightNumber;
-
-  @HiveField(5)
   String? depIata;
-
-  @HiveField(6)
   String? depIcao;
-
-  @HiveField(7)
   String? depTerminal;
-
-  @HiveField(8)
   String? depGate;
-
-  @HiveField(9)
   String? depTime;
-
-  @HiveField(10)
   String? depTimeUtc;
-
-  @HiveField(11)
   String? arrIata;
-
-  @HiveField(12)
   String? arrIcao;
-
-  @HiveField(13)
   String? arrTerminal;
-
-  @HiveField(14)
   String? arrGate;
-
-  @HiveField(15)
   String? arrBaggage;
-
-  @HiveField(16)
   String? arrTime;
-
-  @HiveField(17)
   String? arrTimeUtc;
-
-  @HiveField(18)
   String? csAirlineIata;
-
-  @HiveField(19)
   String? csFlightNumber;
-
-  @HiveField(20)
   String? csFlightIata;
-
-  @HiveField(21)
   String? status;
-
-  @HiveField(22)
   int? duration;
-
-  @HiveField(23)
   int? delayed;
-
-  @HiveField(24)
   int? depDelayed;
-
-  @HiveField(25)
   int? arrDelayed;
-
-  @HiveField(26)
   String? aircraftIcao;
-
-  @HiveField(27)
   int? arrTimeTs;
-
-  @HiveField(28)
   int? depTimeTs;
 
   ScheduleFlights({
@@ -123,7 +63,7 @@ class ScheduleFlights extends HiveObject {
     this.depTimeTs,
   });
 
-  factory ScheduleFlights.fromJson(Map<String, dynamic> json) {
+  factory ScheduleFlights.fromJson(Map<dynamic, dynamic> json) {
     return ScheduleFlights(
       airlineIata: json['airline_iata'],
       airlineIcao: json['airline_icao'],
@@ -224,11 +164,10 @@ class ScheduleFlights extends HiveObject {
       'aircraft_icao': aircraftIcao,
       'arr_time_ts': arrTimeTs,
       'dep_time_ts': depTimeTs,
-      // Add other columns based on ScheduleFlights fields
     };
   }
 
-  factory ScheduleFlights.fromMap(Map<String, dynamic> map) {
+  factory ScheduleFlights.fromMap(Map<dynamic, dynamic> map) {
     return ScheduleFlights(
       airlineIata: map['airline_iata'],
       airlineIcao: map['airline_icao'],
