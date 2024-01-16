@@ -98,7 +98,6 @@ class LocalNotifications {
     required String body,
     required String payload,
     required tz.TZDateTime flightTime,
-    required bool isArr,
     required int id,
   }) async {
     tz.initializeTimeZones();
@@ -111,7 +110,7 @@ class LocalNotifications {
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await _flutterLocalNotificationsPlugin.zonedSchedule(
-        3, title, body, flightTime, notificationDetails,
+        id, title, body, flightTime, notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,

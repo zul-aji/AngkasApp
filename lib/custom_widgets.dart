@@ -1,6 +1,6 @@
+import 'package:angkasapp/response/schedule_flights.dart';
 import 'package:flutter/material.dart';
 
-import 'response/schedule_flights.dart';
 import 'ui/flight_arr_details.dart';
 import 'ui/flight_dep_details.dart';
 import 'local_notifications.dart';
@@ -48,7 +48,7 @@ class ScheduleListView extends StatelessWidget {
             child: ListTile(
                 title: Row(
                   children: [
-                    Container(
+                    SizedBox(
                       width: 20,
                       height: 20,
                       child: Image.network(
@@ -165,7 +165,7 @@ class CustomSearchDelegate extends SearchDelegate {
             child: ListTile(
                 title: Row(
                   children: [
-                    Container(
+                    SizedBox(
                       width: 20,
                       height: 20,
                       child: Image.network(

@@ -10,10 +10,10 @@ class API {
     List<ScheduleFlights>? scheduleFlights;
     String isDep = isArr ? 'arr_iata' : 'dep_iata';
 
-    final Uri url = Uri.parse('${Const.baseAirlabsURL}/schedules');
+    final Uri url = Uri.parse('$baseAirlabsURL/schedules');
 
     final Map<String, String> queryParams = {
-      'api_key': Const.apiKey,
+      'api_key': apiKey,
       isDep: 'CGK',
     };
 
@@ -36,10 +36,10 @@ class API {
   static Future<List<AirlineDetails>?> getAirlineDetail(String iataCode) async {
     List<AirlineDetails>? airlineDetails;
 
-    final Uri url = Uri.parse('${Const.baseAirlabsURL}/airlines');
+    final Uri url = Uri.parse('$baseAirlabsURL/airlines');
 
     final Map<String, String> queryParams = {
-      'api_key': Const.apiKey,
+      'api_key': apiKey,
       'iata_code': iataCode,
     };
 
@@ -62,10 +62,10 @@ class API {
   static Future<FlightDetails?> getFlightDetail(String flightIata) async {
     FlightDetails? flightDetails;
 
-    final Uri url = Uri.parse('${Const.baseAirlabsURL}/flight');
+    final Uri url = Uri.parse('$baseAirlabsURL/flight');
 
     final Map<String, String> queryParams = {
-      'api_key': Const.apiKey,
+      'api_key': apiKey,
       'flight_iata': flightIata,
     };
 

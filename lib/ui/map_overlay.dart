@@ -69,7 +69,7 @@ class MapOverlay extends StatelessWidget {
                             height: 400,
                           );
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       },
                     ),
@@ -81,7 +81,7 @@ class MapOverlay extends StatelessWidget {
                             painter: snapshot.data!,
                           );
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       },
                     ),
@@ -93,7 +93,7 @@ class MapOverlay extends StatelessWidget {
               onPressed: () async {
                 printNumberOfOnes(await setMapList(pT2L1r));
               },
-              child: Text('test'),
+              child: const Text('test'),
             ),
           ],
         ),

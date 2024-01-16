@@ -1,3 +1,4 @@
+import 'package:angkasapp/response/flight_details.dart';
 import 'package:flutter/material.dart';
 
 import '../custom_widgets.dart';
@@ -24,8 +25,8 @@ class _ReminderListState extends State<ReminderList>
   bool isArr = true;
 
   void getReminderList() async {
-    var _arrivalReminderList = await getReminders(true);
-    var _departureReminderList = await getReminders(false);
+    var _arrivalReminderList = HiveFuncs.getReminders(true);
+    var _departureReminderList = HiveFuncs.getReminders(false);
     setState(() {
       arrivalReminderList = _arrivalReminderList;
       arrivalReminderlength = _arrivalReminderList.length;
@@ -58,7 +59,7 @@ class _ReminderListState extends State<ReminderList>
             SliverAppBar(
               leading: IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.arrow_back_ios_new_rounded)),
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded)),
               title: const Text("Reminder List"),
               pinned: true,
               floating: true,
@@ -102,7 +103,7 @@ class _ReminderListState extends State<ReminderList>
                   ? const Center(
                       child: Text('Fetching Data...'),
                     )
-                  : arrivalReminderlength == 0
+                  : arrivalReminderlength == -1
                       ? const Center(
                           child: Text("No arrival reminder"),
                         )

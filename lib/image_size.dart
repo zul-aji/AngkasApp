@@ -26,8 +26,7 @@ Future<ImageDetail> getImageDimensions(String assetPath) async {
 class GetImageDimensionsUsingWidgetListener extends StatelessWidget {
   final String imagePath;
   const GetImageDimensionsUsingWidgetListener(
-      {Key? key, required this.imagePath})
-      : super(key: key);
+      {super.key, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +65,7 @@ class GetImageDimensionsUsingWidgetListener extends StatelessWidget {
 }
 
 class GetAssetImageDimensions extends StatelessWidget {
-  const GetAssetImageDimensions({Key? key}) : super(key: key);
+  const GetAssetImageDimensions({super.key});
 
   Future<ImageDetail> _getImageDimensions(String assetPath) async {
     final byteData = await rootBundle.load(assetPath);

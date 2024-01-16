@@ -25,16 +25,16 @@ class _FlightScheduleState extends State<FlightSchedule>
   TextEditingController controllerSearch = TextEditingController();
 
   void getListSchedule() async {
-    var _scheduleList = await API.getArrDep(true);
+    var scheduleList = await API.getArrDep(true);
     setState(() {
-      arrivalLength = _scheduleList!.length;
-      arrivalList = _scheduleList;
+      arrivalLength = scheduleList!.length;
+      arrivalList = scheduleList;
       _isLoading = false;
     });
-    _scheduleList = await API.getArrDep(false);
+    scheduleList = await API.getArrDep(false);
     setState(() {
-      departureLength = _scheduleList!.length;
-      departureList = _scheduleList;
+      departureLength = scheduleList!.length;
+      departureList = scheduleList;
       _isLoading = false;
     });
   }
@@ -62,7 +62,7 @@ class _FlightScheduleState extends State<FlightSchedule>
             SliverAppBar(
               leading: IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.arrow_back_ios_new_rounded)),
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded)),
               title: const Text("Flight Schedule"),
               pinned: true,
               floating: true,
@@ -115,20 +115,20 @@ class _FlightScheduleState extends State<FlightSchedule>
                         boolIsArr: isArr),
                   );
                 },
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 20,
-                      child: const Icon(
+                      child: Icon(
                         Icons.search,
                         color: Colors.grey,
                       ),
                     ), // Replace with your desired icon
-                    const SizedBox(
+                    SizedBox(
                         width: 8.0), // Adjust the spacing between icon and text
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         'Search for Flight code (IATA or ICAO)',
                         overflow: TextOverflow.ellipsis,

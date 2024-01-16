@@ -67,10 +67,10 @@ tracePath(List<List<Cell>> cellDetails, Pair dest) {
   while (!(cellDetails[row][col].parent_i == row &&
       cellDetails[row][col].parent_j == col)) {
     path.add(Pair(row, col));
-    int temp_row = cellDetails[row][col].parent_i;
-    int temp_col = cellDetails[row][col].parent_j;
-    row = temp_row;
-    col = temp_col;
+    int tempRow = cellDetails[row][col].parent_i;
+    int tempCol = cellDetails[row][col].parent_j;
+    row = tempRow;
+    col = tempCol;
   }
 
   path.add(Pair(row, col));
@@ -515,10 +515,10 @@ void aStarTemp() {
   ];
 
   // Source is the left-most bottom-most corner
-  Pair src = Pair(8, 0);
+  Pair src = const Pair(8, 0);
 
   // Destination is the left-most top-most corner
-  Pair dest = Pair(0, 0);
+  Pair dest = const Pair(0, 0);
 
   aStarSearch(grid, src, dest);
 }

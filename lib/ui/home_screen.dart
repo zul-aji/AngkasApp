@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     print("Listening on Notifications");
     LocalNotifications.onClickNotification.stream.listen((event) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => FlightSchedule()));
+          context, MaterialPageRoute(builder: (context) => const FlightSchedule()));
     });
   }
 
@@ -38,8 +38,8 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
               onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ReminderList())),
-              icon: Icon(Icons.notifications))
+                  MaterialPageRoute(builder: (context) => const ReminderList())),
+              icon: const Icon(Icons.notifications))
         ],
       ),
       body: SizedBox(

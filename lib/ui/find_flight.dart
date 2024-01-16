@@ -14,15 +14,15 @@ class _FindFlightState extends State<FindFlight> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text("Find a Flight"),
+        title: const Text("Find a Flight"),
       ),
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
             width: MediaQuery.of(context).size.width - 32,
             decoration: BoxDecoration(
@@ -30,8 +30,8 @@ class _FindFlightState extends State<FindFlight> {
                 borderRadius: BorderRadius.circular(10)),
             child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 8.0, 0.0),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 8.0, 0.0),
                   child: Expanded(
                       flex: 1,
                       child: Icon(Icons.search, color: Color(0xff737373))),
@@ -54,12 +54,12 @@ class _FindFlightState extends State<FindFlight> {
                 Expanded(
                     flex: 2,
                     child:
-                        ElevatedButton(onPressed: () {}, child: Text("Enter")))
+                        ElevatedButton(onPressed: () {}, child: const Text("Enter")))
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
+          const Padding(
+            padding: EdgeInsets.all(5.0),
             child: Text("Input IATA or ICAO flight code only"),
           )
         ],

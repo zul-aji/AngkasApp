@@ -97,43 +97,7 @@ class ScheduleFlights extends HiveObject {
     );
   }
 
-  set aircraftIata(aircraftIata) {}
-
   Map<String, dynamic> toJson() {
-    return {
-      'airline_iata': airlineIata,
-      'airline_icao': airlineIcao,
-      'flight_iata': flightIata,
-      'flight_icao': flightIcao,
-      'flight_number': flightNumber,
-      'dep_iata': depIata,
-      'dep_icao': depIcao,
-      'dep_terminal': depTerminal,
-      'dep_gate': depGate,
-      'dep_time': depTime,
-      'dep_time_utc': depTimeUtc,
-      'arr_iata': arrIata,
-      'arr_icao': arrIcao,
-      'arr_terminal': arrTerminal,
-      'arr_gate': arrGate,
-      'arr_baggage': arrBaggage,
-      'arr_time': arrTime,
-      'arr_time_utc': arrTimeUtc,
-      'cs_airline_iata': csAirlineIata,
-      'cs_flight_number': csFlightNumber,
-      'cs_flight_iata': csFlightIata,
-      'status': status,
-      'duration': duration,
-      'delayed': delayed,
-      'dep_delayed': depDelayed,
-      'arr_delayed': arrDelayed,
-      'aircraft_icao': aircraftIcao,
-      'arr_time_ts': arrTimeTs,
-      'dep_time_ts': depTimeTs,
-    };
-  }
-
-  Map<String, dynamic> toMap() {
     return {
       'airline_iata': airlineIata,
       'airline_icao': airlineIcao,
@@ -199,5 +163,39 @@ class ScheduleFlights extends HiveObject {
       arrTimeTs: map['arr_time_ts'],
       depTimeTs: map['dep_time_ts'],
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'airline_iata': airlineIata,
+      'airline_icao': airlineIcao,
+      'flight_iata': flightIata,
+      'flight_icao': flightIcao,
+      'flight_number': flightNumber,
+      'dep_iata': depIata,
+      'dep_icao': depIcao,
+      'dep_terminal': depTerminal,
+      'dep_gate': depGate,
+      'dep_time': depTime,
+      'dep_time_utc': depTimeUtc,
+      'arr_iata': arrIata,
+      'arr_icao': arrIcao,
+      'arr_terminal': arrTerminal,
+      'arr_gate': arrGate,
+      'arr_baggage': arrBaggage,
+      'arr_time': arrTime,
+      'arr_time_utc': arrTimeUtc,
+      'cs_airline_iata': csAirlineIata,
+      'cs_flight_number': csFlightNumber,
+      'cs_flight_iata': csFlightIata,
+      'status': status,
+      'duration': duration,
+      'delayed': delayed,
+      'dep_delayed': depDelayed,
+      'arr_delayed': arrDelayed,
+      'aircraft_icao': aircraftIcao,
+      'arr_time_ts': arrTimeTs,
+      'dep_time_ts': depTimeTs,
+    };
   }
 }

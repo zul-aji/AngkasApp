@@ -16,11 +16,11 @@ class FlightArrDetails extends StatefulWidget {
   final bool isArr;
 
   const FlightArrDetails({
-    Key? key,
+    super.key,
     required this.flightIata,
     required this.forReminder,
     required this.isArr,
-  }) : super(key: key);
+  });
 
   @override
   State<FlightArrDetails> createState() => _FlightArrDetailsState();
@@ -29,12 +29,12 @@ class FlightArrDetails extends StatefulWidget {
 class _FlightArrDetailsState extends State<FlightArrDetails> {
   bool _isLoading = true;
   bool _isInReminder = false;
-  FlightDetails? scheduleFlights;
+  FlightDetails? flightDetails;
 
   void getScheduleFlights() async {
-    var _scheduleFlights = await API.getFlightDetail(widget.flightIata);
+    var _flightDetails = await API.getFlightDetail(widget.flightIata);
     setState(() {
-      scheduleFlights = _scheduleFlights;
+      flightDetails = _flightDetails;
       _isLoading = false;
     });
   }
@@ -42,24 +42,24 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
   @override
   void initState() {
     getScheduleFlights();
-    _isInReminder = checkCurrentFlight(widget.flightIata, true);
+    _isInReminder = HiveFuncs.checkCurrentFlight(widget.flightIata, true);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    String arrTime = scheduleFlights?.arrTime ?? "[Unavailable]";
-    String arrEstimated = scheduleFlights?.arrEstimated ?? "[Unavailable]";
-    String arrActual = scheduleFlights?.arrActual ?? "[Unavailable]";
-    String depTime = scheduleFlights?.depTime ?? "[Unavailable]";
-    String depEstimated = scheduleFlights?.depEstimated ?? "[Unavailable]";
-    String depActual = scheduleFlights?.depActual ?? "[Unavailable]";
+    String arrTime = flightDetails?.arrTime ?? "[Unavailable]";
+    String arrEstimated = flightDetails?.arrEstimated ?? "[Unavailable]";
+    String arrActual = flightDetails?.arrActual ?? "[Unavailable]";
+    String depTime = flightDetails?.depTime ?? "[Unavailable]";
+    String depEstimated = flightDetails?.depEstimated ?? "[Unavailable]";
+    String depActual = flightDetails?.depActual ?? "[Unavailable]";
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
-              title: Text("Arriving Flight"),
+              title: const Text("Arriving Flight"),
               pinned: true,
               floating: true,
               actions: [
@@ -80,31 +80,26 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                     } else {
                       _isInReminder
                           ? {
-                            LocalNotifications.showScheduledNotification(
-                                title: widget.flightIata,
-                                body: 'flight is arriving',
-                                payload: 'payload',
-                                flightTime:
-                                    tz.TZDateTime.from(flightDateTime, jakLoc),
-                                isArr: true,
-                              ),
-                              saveReminder(widget.forReminder, true)
-                          }
+                              LocalNotifications.stopNotification(
+                                  widget.flightIata.hashCode),
+                              HiveFuncs.deleteReminder(widget.flightIata, true)
+                            }
                           : {
                               LocalNotifications.showScheduledNotification(
-                                title: widget.flightIata,
-                                body: 'flight is arriving',
-                                payload: 'payload',
-                                flightTime:
-                                    tz.TZDateTime.from(flightDateTime, jakLoc),
-                                isArr: true,
-                                id: 
-                              ),
-                              saveReminder(widget.forReminder, true)
+                                  title: widget.flightIata,
+                                  body: 'flight is arriving',
+                                  payload: 'payload',
+                                  flightTime: tz.TZDateTime.from(
+                                      flightDateTime, jakLoc),
+                                  id: widget.flightIata.hashCode),
+                              HiveFuncs.saveReminder(
+                                  widget.flightIata, true, widget.forReminder)
                             };
                     }
                   },
-                  icon: Icon(Icons.notification_add),
+                  icon: Icon(_isInReminder
+                      ? Icons.notifications_off
+                      : Icons.notification_add),
                 )
               ],
             ),
@@ -124,10 +119,10 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                     Row(
                       children: [
                         Image.network(
-                          "https://airlabs.co/img/airline/m/${scheduleFlights!.airlineIata}.png",
+                          "https://airlabs.co/img/airline/m/${flightDetails?.airlineIata}.png",
                           errorBuilder: (context, error, stackTrace) {
                             // This function will be called if the image fails to load
-                            return Icon(
+                            return const Icon(
                               Icons.error,
                               color: Colors.red,
                             );
@@ -138,8 +133,7 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              scheduleFlights!.airlineName ??
-                                  "[Name Unavailble]",
+                              flightDetails?.airlineName ?? "[Name Unavailble]",
                               style: const TextStyle(fontSize: 20),
                             ),
                             Text(widget.flightIata)
@@ -157,18 +151,18 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text("From: "),
-                              Text(scheduleFlights!.depName ??
+                              Text(flightDetails?.depName ??
                                   "[Departure Airport Unavailable]")
                             ],
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text("To: "),
-                              Text(scheduleFlights!.arrName ??
+                              Text(flightDetails?.arrName ??
                                   "[Arrival Airport Unavailable]")
                             ],
                           ),
@@ -186,21 +180,21 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text("Status: "),
-                              Text(scheduleFlights!.status ??
+                              Text(flightDetails?.status ??
                                   "[Flight Status Unavailable]")
                             ],
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text("Duration: "),
                               Text(
-                                scheduleFlights!.duration == null
+                                flightDetails?.duration == null
                                     ? "[Unavailable]"
-                                    : scheduleFlights!.duration.toString(),
+                                    : flightDetails!.duration.toString(),
                               )
                             ],
                           ),
@@ -216,14 +210,14 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                     Row(
                       children: [
                         const Text("Terminal: "),
-                        Text(scheduleFlights!.arrTerminal ?? "[Unavailable]")
+                        Text(flightDetails?.arrTerminal ?? "[Unavailable]")
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Gate: "),
-                        Text(scheduleFlights!.arrGate ?? "[Unavailable]")
+                        Text(flightDetails?.arrGate ?? "[Unavailable]")
                       ],
                     ),
                     const SizedBox(height: 3.0),
@@ -251,9 +245,9 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                     Row(
                       children: [
                         const Text("Delayed: "),
-                        Text(scheduleFlights!.arrDelayed == null
+                        Text(flightDetails?.arrDelayed == null
                             ? "[Unavailable]"
-                            : "${scheduleFlights!.arrDelayed.toString()} Minutes")
+                            : "${flightDetails!.arrDelayed.toString()} Minutes")
                       ],
                     ),
                     const SizedBox(height: 5.0),
@@ -265,14 +259,14 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                     Row(
                       children: [
                         const Text("Terminal: "),
-                        Text(scheduleFlights!.depTerminal ?? "[Unavailable]")
+                        Text(flightDetails?.depTerminal ?? "[Unavailable]")
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Gate: "),
-                        Text(scheduleFlights!.depGate ?? "[Unavailable]")
+                        Text(flightDetails?.depGate ?? "[Unavailable]")
                       ],
                     ),
                     const SizedBox(height: 3.0),
@@ -300,9 +294,9 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                     Row(
                       children: [
                         const Text("Delayed: "),
-                        Text(scheduleFlights!.depDelayed == null
+                        Text(flightDetails?.depDelayed == null
                             ? "[Unavailable]"
-                            : "${scheduleFlights!.depDelayed.toString()} Minutes"),
+                            : "${flightDetails!.depDelayed.toString()} Minutes"),
                       ],
                     ),
                   ],

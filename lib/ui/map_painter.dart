@@ -26,7 +26,7 @@ class Path1 extends CustomPainter {
       ..color = Colors.blue // Dot color
       ..style = PaintingStyle.fill; // Fill the dot
 
-    final Offset center = Offset(1, 1);
+    const Offset center = Offset(1, 1);
 
     canvas.drawPath(path1, paint);
     canvas.drawPath(path2, paint);
@@ -68,7 +68,7 @@ class DotMap extends CustomPainter {
     }
 
     canvas.drawCircle(
-      Offset(200, 180),
+      const Offset(200, 180),
       3,
       Paint()
         ..color = Colors.green
