@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-import '../const.dart';
-import '../hive_funcs.dart';
-import '../response/schedule_flights.dart';
-import '../local_notifications.dart';
+import '../custom_widgets.dart';
+import '../reminder_util.dart';
 import '../response/flight_details.dart';
 import '../service/airlabs_request.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
-class FlightArrDetails extends StatefulWidget {
+class FlightDetailsPage extends StatefulWidget {
   final String flightIata;
-  final ScheduleFlights forReminder;
   final bool isArr;
 
-  const FlightArrDetails({
+  const FlightDetailsPage({
     super.key,
     required this.flightIata,
-    required this.forReminder,
     required this.isArr,
   });
 
   @override
-  State<FlightArrDetails> createState() => _FlightArrDetailsState();
+  State<FlightDetailsPage> createState() => _FlightDetailsPageState();
 }
 
-class _FlightArrDetailsState extends State<FlightArrDetails> {
+class _FlightDetailsPageState extends State<FlightDetailsPage> {
   bool _isLoading = true;
   bool _isInReminder = false;
   FlightDetails? flightDetails;
@@ -59,43 +52,14 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
-              title: const Text("Arriving Flight"),
+              title: const Text('Flight Details'),
               pinned: true,
               floating: true,
               actions: [
                 IconButton(
                   onPressed: () async {
-                    tz.initializeTimeZones();
-                    DateTime flightDateTime = stringToDateTime(arrTime);
-                    if (arrTime == "[Unavailable]") {
-                      Fluttertoast.showToast(
-                        msg: 'Arrival time is unavailable',
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                      );
-                    } else if (flightDateTime.isBefore(jakartaTime)) {
-                      Fluttertoast.showToast(
-                        msg: 'Flight has arrived at Soekarno-Hatta',
-                      );
-                    } else {
-                      _isInReminder
-                          ? {
-                              LocalNotifications.stopNotification(
-                                  widget.flightIata.hashCode),
-                              HiveFuncs.deleteReminder(widget.flightIata, true)
-                            }
-                          : {
-                              LocalNotifications.showScheduledNotification(
-                                  title: widget.flightIata,
-                                  body: 'flight is arriving',
-                                  payload: 'payload',
-                                  flightTime: tz.TZDateTime.from(
-                                      flightDateTime, jakLoc),
-                                  id: widget.flightIata.hashCode),
-                              HiveFuncs.saveReminder(
-                                  widget.flightIata, true, widget.forReminder)
-                            };
-                    }
+                    callDialog(context, widget.flightIata, arrTime, depTime,
+                        _isInReminder, flightDetails);
                   },
                   icon: Icon(_isInReminder
                       ? Icons.notifications_off
@@ -224,21 +188,21 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                     Row(
                       children: [
                         const Text("Time: "),
-                        Text(dateTimetoString(arrTime))
+                        Text(DateParse.dateTimetoString(arrTime))
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Estimated: "),
-                        Text(dateTimetoString(arrEstimated))
+                        Text(DateParse.dateTimetoString(arrEstimated))
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Actual: "),
-                        Text(dateTimetoString(arrActual))
+                        Text(DateParse.dateTimetoString(arrActual))
                       ],
                     ),
                     const SizedBox(height: 3.0),
@@ -273,21 +237,21 @@ class _FlightArrDetailsState extends State<FlightArrDetails> {
                     Row(
                       children: [
                         const Text("Time: "),
-                        Text(dateTimetoString(depTime))
+                        Text(DateParse.dateTimetoString(depTime))
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Estimated: "),
-                        Text(dateTimetoString(depEstimated))
+                        Text(DateParse.dateTimetoString(depEstimated))
                       ],
                     ),
                     const SizedBox(height: 3.0),
                     Row(
                       children: [
                         const Text("Actual: "),
-                        Text(dateTimetoString(depActual))
+                        Text(DateParse.dateTimetoString(depActual))
                       ],
                     ),
                     const SizedBox(height: 3.0),

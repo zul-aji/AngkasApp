@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'hive_funcs.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'ui/home_screen.dart';
-import 'local_notifications.dart';
+import 'reminder_util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,8 @@ void main() async {
       ?.requestNotificationsPermission();
 
   // Initialize local notif
-  await LocalNotifications.init();
+  await LocalNotif.init();
+  tz.initializeTimeZones();
 
   // Set the Hive database location
   await Hive.initFlutter();

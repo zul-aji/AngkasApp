@@ -1,9 +1,12 @@
 import 'package:angkasapp/response/schedule_flights.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:timezone/timezone.dart' as tz;
 
-import 'ui/flight_arr_details.dart';
-import 'ui/flight_dep_details.dart';
-import 'local_notifications.dart';
+import 'const.dart';
+import 'response/flight_details.dart';
+import 'ui/flight_details.dart';
+import 'reminder_util.dart';
 
 class ScheduleListView extends StatelessWidget {
   const ScheduleListView({
@@ -32,15 +35,10 @@ class ScheduleListView extends StatelessWidget {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => _isArr
-                  ? FlightArrDetails(
-                      flightIata: flightIata,
-                      forReminder: _scheduleList![index],
-                      isArr: _isArr)
-                  : FlightDepDetails(
-                      flightIata: flightIata,
-                      forReminder: _scheduleList![index],
-                      isArr: _isArr),
+              builder: (context) => FlightDetailsPage(
+                flightIata: flightIata,
+                isArr: _isArr,
+              ),
             ),
           ),
           child: Card(
@@ -74,8 +72,84 @@ class ScheduleListView extends StatelessWidget {
                   ],
                 ),
                 subtitle: _isArr
-                    ? Text("Arriving in: ${dateTimetoString(arrivalTime)}")
-                    : Text("Departing in: ${dateTimetoString(departureTime)}"),
+                    ? Text(
+                        "Arriving in: ${DateParse.dateTimetoString(arrivalTime)}")
+                    : Text(
+                        "Departing in: ${DateParse.dateTimetoString(departureTime)}"),
+                trailing: Text(currentIndex?.status ?? '[Unavailable]')),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ReminderListView extends StatelessWidget {
+  const ReminderListView({
+    super.key,
+    required this.reminderListLength,
+    required this.reminderList,
+    required this.isArr,
+  });
+
+  final int reminderListLength;
+  final List<FlightDetails>? reminderList;
+  final bool isArr;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: reminderListLength,
+      itemBuilder: (context, index) {
+        var currentIndex = reminderList?[index];
+        String flightIata = currentIndex?.flightIata ?? "[Unavailable]";
+        String arrivalTime = currentIndex?.arrTime ?? "[Unavailable]";
+        String departureTime = currentIndex?.depTime ?? "[Unavailable]";
+        return GestureDetector(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FlightDetailsPage(
+                flightIata: flightIata,
+                isArr: isArr,
+              ),
+            ),
+          ),
+          child: Card(
+            margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6.0),
+            child: ListTile(
+                title: Row(
+                  children: [
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: Image.network(
+                        "https://airlabs.co/img/airline/s/${currentIndex?.airlineIata}.png",
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          // This function will be called if the image fails to load
+                          return const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Text(
+                      currentIndex?.flightIata ?? "[Flight code unavailable]",
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                subtitle: isArr
+                    ? Text(
+                        "Arriving in: ${DateParse.dateTimetoString(arrivalTime)}")
+                    : Text(
+                        "Departing in: ${DateParse.dateTimetoString(departureTime)}"),
                 trailing: Text(currentIndex?.status ?? '[Unavailable]')),
           ),
         );
@@ -149,15 +223,10 @@ class CustomSearchDelegate extends SearchDelegate {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => boolIsArr
-                  ? FlightArrDetails(
-                      flightIata: flightIata,
-                      forReminder: matchQuery![index],
-                      isArr: boolIsArr)
-                  : FlightDepDetails(
-                      flightIata: flightIata,
-                      forReminder: matchQuery![index],
-                      isArr: boolIsArr),
+              builder: (context) => FlightDetailsPage(
+                flightIata: flightIata,
+                isArr: boolIsArr,
+              ),
             ),
           ),
           child: Card(
@@ -191,8 +260,10 @@ class CustomSearchDelegate extends SearchDelegate {
                   ],
                 ),
                 subtitle: boolIsArr
-                    ? Text("Arriving in: ${dateTimetoString(arrivalTime)}")
-                    : Text("Departing in: ${dateTimetoString(departureTime)}"),
+                    ? Text(
+                        "Arriving in: ${DateParse.dateTimetoString(arrivalTime)}")
+                    : Text(
+                        "Departing in: ${DateParse.dateTimetoString(departureTime)}"),
                 trailing: Text(result?.status ?? '[Unavailable]')),
           ),
         );
@@ -208,4 +279,66 @@ class CustomSearchDelegate extends SearchDelegate {
         (flight.flightNumber != null &&
             flight.flightNumber!.toLowerCase().contains(query.toLowerCase()));
   }
+}
+
+void callDialog(BuildContext context, String flightIata, String arrTime,
+    String depTime, bool isInReminder, FlightDetails? flightDetails) {
+  bool isArr = true;
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Adding a Reminder'),
+        content: Text('When do you want to be reminded?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              isArr = true;
+            },
+            child: Text('On its Arrival'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              isArr = false;
+            },
+            child: Text('On its Departure'),
+          ),
+        ],
+      );
+    },
+  ).then((result) {
+    var flightDateTime = DateParse.stringToDateTime(isArr ? arrTime : depTime);
+    if (flightDateTime == "[Unavailable]") {
+      Fluttertoast.showToast(
+        msg: isArr
+            ? 'Arrival time is unavailable'
+            : 'Departure time is unavailable',
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    } else if (flightDateTime.isBefore(jakartaTime)) {
+      Fluttertoast.showToast(
+        msg: isArr
+            ? 'Flight has arrived at ${flightDetails?.arrName}'
+            : 'Flight has departed from ${flightDetails?.depName}',
+      );
+    } else {
+      isInReminder
+          ? {
+              LocalNotif.stopNotification(flightIata.hashCode),
+              HiveFuncs.deleteReminder(flightIata, isArr)
+            }
+          : {
+              LocalNotif.setScheduledNotification(
+                  title: flightIata,
+                  body: 'flight is arriving',
+                  payload: 'payload',
+                  flightTime: tz.TZDateTime.from(flightDateTime, jakLoc),
+                  id: flightIata.hashCode),
+              HiveFuncs.saveReminder(flightIata, isArr, flightDetails)
+            };
+    }
+  });
 }

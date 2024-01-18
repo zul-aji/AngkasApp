@@ -1,5 +1,5 @@
 import 'package:angkasapp/ui/reminder_list.dart';
-import 'package:angkasapp/local_notifications.dart';
+import 'package:angkasapp/reminder_util.dart';
 import 'package:flutter/material.dart';
 
 import 'find_flight.dart';
@@ -24,9 +24,9 @@ class _HomePageState extends State<HomePage> {
 
   void listenToNotifications() {
     print("Listening on Notifications");
-    LocalNotifications.onClickNotification.stream.listen((event) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const FlightSchedule()));
+    LocalNotif.onClickNotification.stream.listen((event) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const FlightSchedule()));
     });
   }
 
@@ -37,8 +37,10 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Main Screen'),
         actions: [
           IconButton(
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const ReminderList())),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ReminderList())),
               icon: const Icon(Icons.notifications))
         ],
       ),

@@ -59,7 +59,7 @@ class API {
     }
   }
 
-  static Future<FlightDetails?> getFlightDetail(String flightIata) async {
+  static getFlightDetail(String flightIata) async {
     FlightDetails? flightDetails;
 
     final Uri url = Uri.parse('$baseAirlabsURL/flight');
@@ -74,12 +74,16 @@ class API {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
-      final Map<String, dynamic> responseData = data['response'];
-      flightDetails = FlightDetails.fromJson(responseData);
 
-      return flightDetails;
+      if (data.containsKey('response')) {
+        final Map<String, dynamic> responseData = data['response'];
+        flightDetails = FlightDetails.fromJson(responseData);
+        return flightDetails;
+      } else {
+        return false;
+      }
     } else {
-      throw Exception('Failed to load data');
+      return 'Unknown Error';
     }
   }
 }

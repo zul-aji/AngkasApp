@@ -1,9 +1,8 @@
-import 'package:angkasapp/response/flight_details.dart';
 import 'package:flutter/material.dart';
 
 import '../custom_widgets.dart';
-import '../hive_funcs.dart';
-import '../response/schedule_flights.dart';
+import '../reminder_util.dart';
+import '../response/flight_details.dart';
 
 class ReminderList extends StatefulWidget {
   const ReminderList({super.key});
@@ -15,8 +14,8 @@ class ReminderList extends StatefulWidget {
 class _ReminderListState extends State<ReminderList>
     with TickerProviderStateMixin {
   bool _isLoading = true;
-  List<ScheduleFlights>? arrivalReminderList;
-  List<ScheduleFlights>? departureReminderList;
+  List<FlightDetails>? arrivalReminderList;
+  List<FlightDetails>? departureReminderList;
   late TabController _tabController;
 
   int arrivalReminderlength = 0;
@@ -103,15 +102,14 @@ class _ReminderListState extends State<ReminderList>
                   ? const Center(
                       child: Text('Fetching Data...'),
                     )
-                  : arrivalReminderlength == -1
+                  : arrivalReminderlength == 0
                       ? const Center(
                           child: Text("No arrival reminder"),
                         )
-                      : ScheduleListView(
-                          scheduleList: arrivalReminderList,
-                          scheduleLength: arrivalReminderlength,
-                          isArr: isArr,
-                        ),
+                      : ReminderListView(
+                          reminderListLength: arrivalReminderlength,
+                          reminderList: arrivalReminderList,
+                          isArr: isArr),
               //Departure
               _isLoading
                   ? const Center(
@@ -121,11 +119,10 @@ class _ReminderListState extends State<ReminderList>
                       ? const Center(
                           child: Text("No departure reminder"),
                         )
-                      : ScheduleListView(
-                          scheduleList: departureReminderList,
-                          scheduleLength: departureReminderLength,
-                          isArr: isArr,
-                        ),
+                      : ReminderListView(
+                          reminderListLength: departureReminderLength,
+                          reminderList: departureReminderList,
+                          isArr: isArr),
             ],
           ),
         ),
