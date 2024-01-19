@@ -86,49 +86,59 @@ class _FindFlightState extends State<FindFlight> {
           ),
           Visibility(
             visible: isCardVisibile,
-            child: GestureDetector(
-              onTap: () {
-                FlightDetailsPage(
-                  flightIata: flightDetails?.flightIata ?? '[Unavailable]',
-                  isArr: true,
-                );
-              },
-              child: Card(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
-                child: ListTile(
-                  title: Row(
-                    children: [
-                      SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: Image.network(
-                          "https://airlabs.co/img/airline/s/${flightDetails?.airlineIata}.png",
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(
-                              Icons.error,
-                              color: Colors.red,
-                            );
-                          },
+            child: flightDetails == null
+                ? const Center(
+                    child: Text(
+                        'Flight not found, you might put the wrong IATA code'))
+                : GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FlightDetailsPage(
+                          flightIata:
+                              flightDetails?.flightIata ?? '[Unavailable]',
+                          isArr: true,
                         ),
                       ),
-                      const SizedBox(width: 8.0),
-                      Text(
-                        flightDetails?.flightIata ?? "[Unavailable]",
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                    ),
+                    child: Card(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 6.0),
+                      child: ListTile(
+                        title: Row(
+                          children: [
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: Image.network(
+                                "https://airlabs.co/img/airline/s/${flightDetails?.airlineIata}.png",
+                                fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(
+                                    Icons.error,
+                                    color: Colors.red,
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 8.0),
+                            Text(
+                              flightDetails?.flightIata ?? "[Unavailable]",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
+                        subtitle:
+                            Text(flightDetails?.airlineName ?? '[Unavailable]'),
+                        trailing:
+                            Text(flightDetails?.status ?? '[Unavailable]'),
                       ),
-                    ],
+                    ),
                   ),
-                  subtitle: Text(flightDetails?.airlineName ?? '[Unavailable]'),
-                  trailing: Text(flightDetails?.status ?? '[Unavailable]'),
-                ),
-              ),
-            ),
           ),
         ],
       ),

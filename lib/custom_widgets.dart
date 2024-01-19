@@ -284,6 +284,7 @@ class CustomSearchDelegate extends SearchDelegate {
 void callDialog(BuildContext context, String flightIata, String arrTime,
     String depTime, bool isInReminder, FlightDetails? flightDetails) {
   bool isArr = true;
+  bool isCancel = true;
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -295,6 +296,7 @@ void callDialog(BuildContext context, String flightIata, String arrTime,
             onPressed: () {
               Navigator.of(context).pop();
               isArr = true;
+              isCancel = false;
             },
             child: Text('On its Arrival'),
           ),
@@ -302,15 +304,28 @@ void callDialog(BuildContext context, String flightIata, String arrTime,
             onPressed: () {
               Navigator.of(context).pop();
               isArr = false;
+              isCancel = false;
             },
             child: Text('On its Departure'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              isCancel = true;
+            },
+            child: Text('Cancel'),
           ),
         ],
       );
     },
   ).then((result) {
     var flightDateTime = DateParse.stringToDateTime(isArr ? arrTime : depTime);
-    if (flightDateTime == "[Unavailable]") {
+    if (isCancel) {
+      Fluttertoast.showToast(
+        msg: 'Canceled',
+        textColor: Colors.black,
+      );
+    } else if (flightDateTime == "[Unavailable]") {
       Fluttertoast.showToast(
         msg: isArr
             ? 'Arrival time is unavailable'
@@ -325,20 +340,13 @@ void callDialog(BuildContext context, String flightIata, String arrTime,
             : 'Flight has departed from ${flightDetails?.depName}',
       );
     } else {
-      isInReminder
-          ? {
-              LocalNotif.stopNotification(flightIata.hashCode),
-              HiveFuncs.deleteReminder(flightIata, isArr)
-            }
-          : {
-              LocalNotif.setScheduledNotification(
-                  title: flightIata,
-                  body: 'flight is arriving',
-                  payload: 'payload',
-                  flightTime: tz.TZDateTime.from(flightDateTime, jakLoc),
-                  id: flightIata.hashCode),
-              HiveFuncs.saveReminder(flightIata, isArr, flightDetails)
-            };
+      LocalNotif.setScheduledNotification(
+          title: flightIata,
+          body: 'flight is arriving',
+          payload: 'payload',
+          flightTime: tz.TZDateTime.from(flightDateTime, jakLoc),
+          id: isArr ? flightIata.hashCode : flightIata.hashCode + 1);
+      HiveFuncs.saveReminder(isArr, flightDetails);
     }
   });
 }

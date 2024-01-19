@@ -58,8 +58,16 @@ class _FlightDetailsPageState extends State<FlightDetailsPage> {
               actions: [
                 IconButton(
                   onPressed: () async {
-                    callDialog(context, widget.flightIata, arrTime, depTime,
-                        _isInReminder, flightDetails);
+                    _isInReminder
+                        ? {
+                            LocalNotif.stopNotification(widget.isArr
+                                ? widget.flightIata.hashCode
+                                : widget.flightIata.hashCode + 1),
+                            HiveFuncs.deleteReminder(
+                                widget.flightIata, widget.isArr)
+                          }
+                        : callDialog(context, widget.flightIata, arrTime,
+                            depTime, _isInReminder, flightDetails);
                   },
                   icon: Icon(_isInReminder
                       ? Icons.notifications_off

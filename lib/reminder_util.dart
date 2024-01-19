@@ -127,7 +127,7 @@ class LocalNotif {
 
 class HiveFuncs {
   static Future<void> saveReminder(
-      String flightIata, bool isArr, FlightDetails? flightDetails) async {
+      bool isArr, FlightDetails? flightDetails) async {
     final box = isArr ? arrBox : depBox;
 
     final details = {'details': flightDetails?.toMap()};

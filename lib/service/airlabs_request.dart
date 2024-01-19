@@ -80,7 +80,7 @@ class API {
         flightDetails = FlightDetails.fromJson(responseData);
         return flightDetails;
       } else {
-        return false;
+        return null;
       }
     } else {
       return 'Unknown Error';
