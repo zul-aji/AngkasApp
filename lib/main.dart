@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'ui/home_screen.dart';
+import 'home/home_screen.dart';
 import 'reminder_util.dart';
 
 void main() async {

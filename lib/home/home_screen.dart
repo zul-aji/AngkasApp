@@ -1,10 +1,11 @@
-import 'package:angkasapp/ui/reminder_list.dart';
+import 'package:angkasapp/reminder/reminder_list.dart';
 import 'package:angkasapp/reminder_util.dart';
 import 'package:flutter/material.dart';
 
-import 'find_flight.dart';
-import 'flight_schedule.dart';
-import 'map_overlay.dart';
+import '../flight/find_flight.dart';
+import '../map/map_pick.dart';
+import '../schedule/flight_schedule.dart';
+import '../map/map_overlay.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -59,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const MapOverlay())),
+                  MaterialPageRoute(builder: (context) => const MapPick())),
               child: const Text(
                 'Airport Map',
                 style: TextStyle(fontSize: 20),

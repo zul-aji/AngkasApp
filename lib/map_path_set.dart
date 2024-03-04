@@ -7,7 +7,7 @@ import 'image_size.dart';
 
 Future<img.Image?> loadImage(String path) async {
   // Load the image from the given path
-  ImageDetail imageDetail = await getImageDimensions(pT2L1r);
+  ImageDetail imageDetail = await getImageDimensions(path);
   return img.decodeImage(Uint8List.fromList(imageDetail.bytes!));
 }
 
@@ -70,7 +70,7 @@ bool isPath(int pixel) {
   // Define your target color values
   int targetRed = 204;
   int targetGreen = 204;
-  int targetBlue = 210;
+  int targetBlue = 204;
 
   // Define a tolerance range for each color channel
   int tolerance = 20;

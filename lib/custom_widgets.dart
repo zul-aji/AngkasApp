@@ -5,7 +5,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 import 'const.dart';
 import 'response/flight_details.dart';
-import 'ui/flight_details.dart';
+import 'flight/flight_details.dart';
 import 'reminder_util.dart';
 
 class ScheduleListView extends StatelessWidget {
