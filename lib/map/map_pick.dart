@@ -18,6 +18,10 @@ class _MapPickState extends State<MapPick> {
   List<Location> filteredCategory = [];
   List<Location> filteredLocation = [];
 
+  String? terminalPath;
+  double? xMap;
+  double? yMap;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,14 +45,19 @@ class _MapPickState extends State<MapPick> {
               maxScale: 7.0,
               child: Stack(
                 children: [
-                  Image.asset(locList[0].terminalPath),
-                  Positioned(
-                    left: locList[0].xValue,
-                    bottom: locList[0].yValue,
-                    child: const Icon(
-                      CupertinoIcons.map_pin,
-                      color: Colors.lightBlue,
-                      size: 30,
+                  terminalPath != null
+                      ? Image.asset(terminalPath!)
+                      : Image.asset(pT1L1),
+                  Visibility(
+                    visible: (xMap == null && yMap == null) ? false : true,
+                    child: Positioned(
+                      left: xMap,
+                      bottom: yMap,
+                      child: const Icon(
+                        CupertinoIcons.map_pin,
+                        color: Colors.lightBlue,
+                        size: 30,
+                      ),
                     ),
                   ),
                 ],
@@ -119,9 +128,9 @@ class _MapPickState extends State<MapPick> {
                             ? const Text("Pick Terminal First")
                             : const Text("Select Category"),
                         value: selectedCategory,
-                        onChanged: (String? categoryValue) {
+                        onChanged: (String? categoryMap) {
                           setState(() {
-                            selectedCategory = categoryValue;
+                            selectedCategory = categoryMap;
                             filteredLocation = filteredCategory
                                 .where((location) =>
                                     location.category == selectedCategory)
@@ -168,7 +177,7 @@ class _MapPickState extends State<MapPick> {
                 ),
                 DropdownButton<String>(
                   hint: selectedCategory == null
-                      ? const Text("Select Category First")
+                      ? const Text("Pick Category First")
                       : const Text("Select Location"),
                   value: selectedLocation,
                   onChanged: (String? locationValue) {
@@ -194,6 +203,40 @@ class _MapPickState extends State<MapPick> {
                       : [],
                 )
               ],
+            ),
+          ),
+          // Button to change map
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                if (selectedTerminal != null &&
+                    selectedCategory != null &&
+                    selectedLocation != null) {
+                  final location = locList.firstWhere((loc) =>
+                      loc.terminalName == selectedTerminal &&
+                      loc.category == selectedCategory &&
+                      loc.name == selectedLocation);
+                  terminalPath = location.terminalPath;
+                  xMap = location.xMap;
+                  yMap = location.yMap;
+                }
+              });
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 18.0, vertical: 15.0),
+              padding: EdgeInsets.all(15.0),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: Colors.deepOrange.shade600,
+                  borderRadius: BorderRadius.circular(8)),
+              child: Center(
+                  child: Text(
+                "Find Location",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18),
+              )),
             ),
           )
         ],
