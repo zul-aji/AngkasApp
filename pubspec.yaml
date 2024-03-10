@@ -42,13 +42,14 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+  - assets/Pin.png
   - assets/T1_L1.jpg
   - assets/T1_L2.jpg
   - assets/T2_L1.jpg
-  - assets/T2_L1_RE.jpg
   - assets/T2_L2.jpg
   - assets/T3_1_Arrival.jpg
   - assets/T3_2_BoardingLounge.jpg
   - assets/T3_3_CheckInArea.jpg
   - assets/T3_4_GedungParkir&ExhibitionHallDomestic_M.jpg
   - assets/T3_5_GedungParkir&ExhibitionHallInternational.jpg
+  - assets/T2_L2_Path.png

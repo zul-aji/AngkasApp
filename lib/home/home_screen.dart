@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const MapPick())),
+                  MaterialPageRoute(builder: (context) => MapOverlay())),
               child: const Text(
                 'Airport Map',
                 style: TextStyle(fontSize: 20),

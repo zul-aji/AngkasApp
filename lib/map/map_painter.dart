@@ -1,38 +1,31 @@
 import 'package:flutter/material.dart';
-
+import 'package:tuple/tuple.dart';
+import '../a_star_algo.dart';
 import '../map_path_set.dart';
 
-class Path1 extends CustomPainter {
+typedef Pair = Tuple2<int, int>;
+
+class PathMap extends CustomPainter {
+  final List<Pair> trace;
+
+  PathMap({required this.trace});
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
       ..color = Colors.red
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
+      ..strokeWidth = 1;
 
-    final Path path1 = Path()
-      ..moveTo(55, 240)
-      ..lineTo(75, 200);
-
-    final Path path2 = Path()
-      ..moveTo(75, 200)
-      ..lineTo(95, 200);
-
-    final Path path3 = Path()
-      ..moveTo(95, 200)
-      ..lineTo(100, 190);
-
-    final Paint paintDot = Paint()
-      ..color = Colors.blue // Dot color
-      ..style = PaintingStyle.fill; // Fill the dot
-
-    const Offset center = Offset(1, 1);
-
-    canvas.drawPath(path1, paint);
-    canvas.drawPath(path2, paint);
-    canvas.drawPath(path3, paint);
-
-    canvas.drawCircle(center, 1, paintDot);
+    for (int i = 0; i < trace.length; i++) {
+      if (i + 1 < trace.length) {
+        final Path path = Path()
+          ..moveTo(
+              trace[i].item2.toDouble() - 1.5, trace[i].item1.toDouble() - 1.5)
+          ..lineTo(trace[i + 1].item2.toDouble() - 1.5,
+              trace[i + 1].item1.toDouble() - 1.5);
+        canvas.drawPath(path, paint);
+      }
+    }
   }
 
   @override
@@ -61,21 +54,22 @@ class DotMap extends CustomPainter {
       for (int j = 0; j < grid[i].length; j++) {
         if (grid[i][j] == 1) {
           // If the cell has a value of 1, paint it with a specific color
-          final Offset coordinate = Offset(j.toDouble(), i.toDouble());
-          canvas.drawCircle(coordinate, 1, paintDot);
+          // final Offset coordinate = Offset(j.toDouble() - 1.5, i.toDouble() - 1.5);
+          final Offset coordinate =
+              Offset(j.toDouble() - 1.5, i.toDouble() - 1.5);
+          canvas.drawCircle(coordinate, 0.3, paintDot);
+          // print("(x = $j, y = $i)");
         }
       }
     }
 
     canvas.drawCircle(
-      const Offset(200, 180),
-      3,
+      const Offset(302, 240),
+      1,
       Paint()
         ..color = Colors.green
         ..style = PaintingStyle.fill,
     );
-
-    print('paint done');
   }
 
   @override
@@ -87,4 +81,9 @@ class DotMap extends CustomPainter {
 Future<DotMap> createDotMap(String path) async {
   List<List<int>> grid = await setMapList(path);
   return DotMap(path: path, grid: grid);
+}
+
+Future<PathMap> createPathMap() async {
+  List<Pair> trace = await aStarTry();
+  return PathMap(trace: trace);
 }

@@ -18,20 +18,26 @@ class _MapPickState extends State<MapPick> {
   List<Location> filteredCategory = [];
   List<Location> filteredLocation = [];
 
-  String? terminalPath;
-  double? xMap;
-  double? yMap;
+  String terminalPath = locList[0].terminalPath;
+  double xMap = locList[0].xValue;
+  double yMap = locList[0].yValue;
+  // String? terminalPath;
+  // double? xMap;
+  // double? yMap;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded)),
         title: const Text('Airport Map'),
       ),
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.all(15.0),
+            margin: EdgeInsets.all(14.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               border: Border.all(
@@ -40,30 +46,33 @@ class _MapPickState extends State<MapPick> {
               ),
               borderRadius: BorderRadius.circular(5),
             ),
-            child: InteractiveViewer(
-              boundaryMargin: EdgeInsets.zero,
-              maxScale: 7.0,
-              child: Stack(
-                children: [
-                  terminalPath != null
-                      ? Image.asset(terminalPath!)
-                      : Image.asset(pT1L1),
-                  Visibility(
-                    visible: (xMap == null && yMap == null) ? false : true,
-                    child: Positioned(
-                      left: xMap,
-                      bottom: yMap,
-                      child: const Icon(
-                        CupertinoIcons.map_pin,
-                        color: Colors.lightBlue,
-                        size: 30,
-                      ),
+            child: SizedBox(
+              width: 360.72727272727275,
+              height: 360.72727272727275,
+              child: InteractiveViewer(
+                boundaryMargin: EdgeInsets.zero,
+                maxScale: 7.0,
+                child: Stack(
+                  children: [
+                    terminalPath != null
+                        ? Image.asset(terminalPath!)
+                        : Image.asset(pT1L2),
+                    Visibility(
+                      visible: (xMap == null && yMap == null) ? false : true,
+                      child: Positioned(
+                          left: xMap,
+                          bottom: yMap,
+                          child: Image.asset(
+                            'assets/Pin.png',
+                            scale: 5,
+                          )),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
+
           //Drop down button
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
@@ -90,14 +99,14 @@ class _MapPickState extends State<MapPick> {
                             selectedTerminal = terminalValue;
                             filteredCategory = locList
                                 .where((location) =>
-                                    location.terminalName == selectedTerminal)
+                                    location.terminal == selectedTerminal)
                                 .toList();
                             selectedCategory = null;
                           });
                         },
                         items: [
                           ...locList
-                              .map((location) => location.terminalName)
+                              .map((location) => location.terminal)
                               .toSet()
                               .map<DropdownMenuItem<String>>(
                                   (String terminalName) {
@@ -142,8 +151,7 @@ class _MapPickState extends State<MapPick> {
                             ? [
                                 ...filteredCategory
                                     .where((location) =>
-                                        location.terminalName ==
-                                        selectedTerminal)
+                                        location.terminal == selectedTerminal)
                                     .map((location) => location.category)
                                     .toSet()
                                     .map<DropdownMenuItem<String>>(
@@ -189,7 +197,7 @@ class _MapPickState extends State<MapPick> {
                       ? [
                           ...filteredLocation
                               .where((location) =>
-                                  location.terminalName == selectedTerminal &&
+                                  location.terminal == selectedTerminal &&
                                   location.category == selectedCategory)
                               .map((location) => location.name)
                               .toSet()
@@ -213,7 +221,7 @@ class _MapPickState extends State<MapPick> {
                     selectedCategory != null &&
                     selectedLocation != null) {
                   final location = locList.firstWhere((loc) =>
-                      loc.terminalName == selectedTerminal &&
+                      loc.terminal == selectedTerminal &&
                       loc.category == selectedCategory &&
                       loc.name == selectedLocation);
                   terminalPath = location.terminalPath;

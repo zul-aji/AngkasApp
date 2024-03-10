@@ -7,9 +7,6 @@ import 'map_path_set.dart';
 typedef Pair = Tuple2<int, int>;
 typedef pPair = Tuple2<double, Pair>;
 
-int ROW = 9;
-int COL = 10;
-
 class Cell {
   int parent_i;
   int parent_j;
@@ -27,10 +24,10 @@ class Cell {
 
 // A Utility Function to check whether given cell (row, col)
 // is a valid cell or not.
-bool isValid(int row, int col) {
+bool isValid(int row, int col, int length) {
   // Returns true if row number and column number
   // is in range
-  return (row >= 0) && (row < ROW) && (col >= 0) && (col < COL);
+  return (row >= 0) && (row < length) && (col >= 0) && (col < length);
 }
 
 // A Utility Function to check whether the given cell is
@@ -85,23 +82,27 @@ tracePath(List<List<Cell>> cellDetails, Pair dest) {
 // A Function to find the shortest path between
 // a given source cell to a destination cell according
 // to A* Search Algorithm
-aStarSearch(List<List<int>> grid, Pair src, Pair dest) {
+aStarSearch(List<List<int>> grid, int gridLength, Pair src, Pair dest) {
   // If the source is out of range
-  if (!isValid(src.item1, src.item2)) {
-    print("Source is invalid 1");
+  if (!isValid(src.item1, src.item2, gridLength)) {
+    print("Source is invalid!");
     return;
   }
 
   // If the destination is out of range
-  if (!isValid(dest.item1, dest.item2)) {
-    print("Destination is invalid");
+  if (!isValid(dest.item1, dest.item2, gridLength)) {
+    print("Destination is invalid!");
     return;
   }
 
   // Either the source or the destination is blocked
-  if (!isUnBlocked(grid, src.item1, src.item2) ||
-      !isUnBlocked(grid, dest.item1, dest.item2)) {
-    print("Source or the destination is blocked");
+  if (!isUnBlocked(grid, src.item1, src.item2)) {
+    print("Source is not a path");
+    return;
+  }
+
+  if (!isUnBlocked(grid, dest.item1, dest.item2)) {
+    print("Destination is not a path");
     return;
   }
 
@@ -115,16 +116,16 @@ aStarSearch(List<List<int>> grid, Pair src, Pair dest) {
   // means that no cell has been included yet. This closed
   // list is implemented as a boolean 2D array.
   List<List<bool>> closedList = List.generate(
-    ROW,
-    (i) => List.generate(COL, (j) => false),
+    gridLength,
+    (i) => List.generate(gridLength, (j) => false),
   );
 
   // Declare a 2D array of structure to hold the details
   // of that cell
   List<List<Cell>> cellDetails = List.generate(
-    ROW,
+    gridLength,
     (i) => List.generate(
-      COL,
+      gridLength,
       (j) => Cell(
         parent_i: -1,
         parent_j: -1,
@@ -137,8 +138,8 @@ aStarSearch(List<List<int>> grid, Pair src, Pair dest) {
 
   int i, j;
 
-  for (i = 0; i < ROW; i++) {
-    for (j = 0; j < COL; j++) {
+  for (i = 0; i < gridLength; i++) {
+    for (j = 0; j < gridLength; j++) {
       cellDetails[i][j].f = double.infinity;
       cellDetails[i][j].g = double.infinity;
       cellDetails[i][j].h = double.infinity;
@@ -209,7 +210,7 @@ aStarSearch(List<List<int>> grid, Pair src, Pair dest) {
     //----------- 1st Successor (North) ------------
 
     // Only process this cell if this is a valid one
-    if (isValid(i - 1, j) == true) {
+    if (isValid(i - 1, j, gridLength) == true) {
       // If the destination cell is the same as the
       // current successor
       if (isDestination(i - 1, j, dest) == true) {
@@ -255,7 +256,7 @@ aStarSearch(List<List<int>> grid, Pair src, Pair dest) {
     //----------- 2nd Successor (South) ------------
 
     // Only process this cell if this is a valid one
-    if (isValid(i + 1, j) == true) {
+    if (isValid(i + 1, j, gridLength) == true) {
       // If the destination cell is the same as the
       // current successor
       if (isDestination(i + 1, j, dest) == true) {
@@ -301,7 +302,7 @@ aStarSearch(List<List<int>> grid, Pair src, Pair dest) {
     //----------- 3rd Successor (East) ------------
 
     // Only process this cell if this is a valid one
-    if (isValid(i, j + 1) == true) {
+    if (isValid(i, j + 1, gridLength) == true) {
       // If the destination cell is the same as the
       // current successor
       if (isDestination(i, j + 1, dest) == true) {
@@ -348,7 +349,7 @@ aStarSearch(List<List<int>> grid, Pair src, Pair dest) {
     //----------- 4th Successor (West) ------------
 
     // Only process this cell if this is a valid one
-    if (isValid(i, j - 1) == true) {
+    if (isValid(i, j - 1, gridLength) == true) {
       // If the destination cell is the same as the
       // current successor
       if (isDestination(i, j - 1, dest) == true) {
@@ -395,7 +396,7 @@ aStarSearch(List<List<int>> grid, Pair src, Pair dest) {
     //----------- 5th Successor (North-East) ------------
 
     // Only process this cell if this is a valid one
-    if (isValid(i - 1, j + 1) == true) {
+    if (isValid(i - 1, j + 1, gridLength) == true) {
       // If the destination cell is the same as the
       // current successor
       if (isDestination(i - 1, j + 1, dest) == true) {
@@ -442,7 +443,7 @@ aStarSearch(List<List<int>> grid, Pair src, Pair dest) {
     //----------- 6th Successor (North-West) ------------
 
     // Only process this cell if this is a valid one
-    if (isValid(i - 1, j - 1) == true) {
+    if (isValid(i - 1, j - 1, gridLength) == true) {
       // If the destination cell is the same as the
       // current successor
       if (isDestination(i - 1, j - 1, dest) == true) {
@@ -503,7 +504,7 @@ void aStarTemp() {
    1--> The cell is not blocked
    0--> The cell is blocked    */
   List<List<int>> grid = [
-    [1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
+    [1, 0, 1, 1, 1, 1, 0, 1, 1, 0],
     [1, 1, 1, 0, 1, 1, 1, 0, 1, 1],
     [1, 1, 1, 0, 1, 1, 0, 1, 0, 1],
     [0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
@@ -511,20 +512,22 @@ void aStarTemp() {
     [1, 0, 1, 1, 1, 1, 0, 1, 0, 0],
     [1, 0, 0, 0, 0, 1, 0, 0, 0, 1],
     [1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
-    [1, 1, 1, 0, 0, 0, 1, 0, 0, 1],
+    [0, 1, 1, 0, 0, 0, 1, 0, 0, 0],
   ];
 
-  // Source is the left-most bottom-most corner
-  Pair src = const Pair(8, 0);
+  // Source (y, x)
+  Pair src = const Pair(0, 3);
 
-  // Destination is the left-most top-most corner
-  Pair dest = const Pair(0, 0);
+  // Destination (y, x)
+  Pair dest = const Pair(2, 0);
 
-  aStarSearch(grid, src, dest);
+  aStarSearch(grid, grid.length, src, dest);
 }
 
 aStarTry() async {
-  List<List<int>> grid = await setMapList(pT2L1r);
+  List<List<int>> grid = await setMapList(pT2L2p);
+  Pair src = const Pair(242, 55);
+  Pair dest = const Pair(240, 302);
 
-  return grid;
+  return aStarSearch(grid, grid.length, src, dest);
 }

@@ -11,19 +11,14 @@ Future<img.Image?> loadImage(String path) async {
   return img.decodeImage(Uint8List.fromList(imageDetail.bytes!));
 }
 
-img.Image resizeImage(img.Image originalImage) {
-  // Resize the image to 400x400
-  return img.copyResize(originalImage, width: 400, height: 400);
-}
-
-List<List<int>> convertImageToGrid(img.Image resizedImage) {
+List<List<int>> convertImageToGrid(img.Image image) {
   // Convert the resized image to a grid
   return List.generate(
-    resizedImage.height,
+    image.height,
     (i) => List.generate(
-      resizedImage.width,
+      image.width,
       (j) {
-        final pixel = resizedImage.getPixel(j, i);
+        final pixel = image.getPixel(j, i);
         return isPath(pixel) ? 1 : 0;
       },
     ),
@@ -49,13 +44,10 @@ class ImageProcessor {
       throw Exception('Failed to load the image');
     }
 
-    // Resize the image to 400x400
-    img.Image resizedImage = resizeImage(originalImage);
-
-    RGBaValue(resizedImage, 200, 180);
+    // RGBaValue(originalImage, 200, 180);
 
     // Convert the resized image to a grid
-    List<List<int>> grid = convertImageToGrid(resizedImage);
+    List<List<int>> grid = convertImageToGrid(originalImage);
 
     return grid;
   }
@@ -73,7 +65,7 @@ bool isPath(int pixel) {
   int targetBlue = 204;
 
   // Define a tolerance range for each color channel
-  int tolerance = 20;
+  int tolerance = 0;
 
   // Check if the pixel is a path based on the tolerance range
   if ((red >= targetRed - tolerance && red <= targetRed + tolerance) &&

@@ -3,6 +3,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'home/home_screen.dart';
+import 'map/map_overlay.dart';
+import 'map/map_pick.dart';
 import 'reminder_util.dart';
 
 void main() async {
@@ -40,7 +42,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      // home: HomePage(),
+      home: MapOverlay(),
+      // home: MapPick(),
     );
   }
 }
