@@ -1,3 +1,4 @@
+import 'package:angkasapp/map/map_overlay.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -240,6 +241,26 @@ class _MapPickState extends State<MapPick> {
               child: Center(
                   child: Text(
                 "Find Location",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18),
+              )),
+            ),
+          ),
+          GestureDetector(
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const MapOverlay())),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 18.0, vertical: 15.0),
+              padding: EdgeInsets.all(15.0),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: Colors.deepOrange.shade600,
+                  borderRadius: BorderRadius.circular(8)),
+              child: Center(
+                  child: Text(
+                "Map Navigate",
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,

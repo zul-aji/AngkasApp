@@ -10,6 +10,8 @@ const String pT3LC = 'assets/T3_3_CheckInArea.jpg';
 const String pT3GPD = 'assets/T3_4_GedungParkir&ExhibitionHallDomestic_M.jpg';
 const String pT3GPI =
     'assets/T3_5_GedungParkir&ExhibitionHallInternational.jpg';
+
+const String pT2L1p = 'assets/T2_L1_Path.png';
 const String pT2L2p = 'assets/T2_L2_Path.png';
 
 const String baseAirlabsURL = "https://airlabs.co/api/v9";

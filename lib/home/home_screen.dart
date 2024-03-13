@@ -59,8 +59,8 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(8), // Border radius
                 ),
               ),
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MapOverlay())),
+              onPressed: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MapPick())),
               child: const Text(
                 'Airport Map',
                 style: TextStyle(fontSize: 20),

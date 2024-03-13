@@ -51,9 +51,9 @@ class MapOverlay extends StatelessWidget {
                   maxScale: 7.0,
                   child: Stack(
                     children: [
-                      Image.asset(pT2L2),
+                      Image.asset(pT2L1),
                       FutureBuilder<DotMap>(
-                        future: createDotMap(pT2L2p),
+                        future: createDotMap(pT2L1p),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.done) {

@@ -60,12 +60,12 @@ bool isPath(int pixel) {
   int blue = img.getBlue(pixel);
 
   // Define your target color values
-  int targetRed = 204;
-  int targetGreen = 204;
-  int targetBlue = 204;
+  int targetRed = 0;
+  int targetGreen = 255;
+  int targetBlue = 43;
 
   // Define a tolerance range for each color channel
-  int tolerance = 0;
+  int tolerance = 10;
 
   // Check if the pixel is a path based on the tolerance range
   if ((red >= targetRed - tolerance && red <= targetRed + tolerance) &&

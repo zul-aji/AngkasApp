@@ -525,7 +525,7 @@ void aStarTemp() {
 }
 
 aStarTry() async {
-  List<List<int>> grid = await setMapList(pT2L2p);
+  List<List<int>> grid = await setMapList(pT2L1p);
   Pair src = const Pair(242, 55);
   Pair dest = const Pair(240, 302);
 
