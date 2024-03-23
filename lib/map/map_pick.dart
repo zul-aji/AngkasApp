@@ -57,7 +57,7 @@ class _MapPickState extends State<MapPick> {
                   children: [
                     terminalPath != null
                         ? Image.asset(terminalPath!)
-                        : Image.asset(pT1L2),
+                        : Image.asset(T1L2),
                     Visibility(
                       visible: (xMap == null && yMap == null) ? false : true,
                       child: Positioned(

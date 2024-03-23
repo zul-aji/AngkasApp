@@ -43,14 +43,27 @@ flutter:
   uses-material-design: true
   assets:
   - assets/Pin.png
-  - assets/T1_L1.jpg
-  - assets/T1_L2.jpg
-  - assets/T2_L1.jpg
-  - assets/T2_L2.jpg
-  - assets/T3_1_Arrival.jpg
-  - assets/T3_2_BoardingLounge.jpg
-  - assets/T3_3_CheckInArea.jpg
-  - assets/T3_4_GedungParkir&ExhibitionHallDomestic_M.jpg
-  - assets/T3_5_GedungParkir&ExhibitionHallInternational.jpg
-  - assets/T2_L1_Path.png
-  - assets/T2_L2_Path.png
+
+  - assets/map/T1_L1.jpg
+  - assets/map/T1_L2.jpg
+  - assets/map/T2_L1.jpg
+  - assets/map/T2_L2.jpg
+  - assets/map/T3_GP_DA.jpg
+  - assets/map/T3_GP_IA.jpg
+  - assets/map/T3_LD_DA.jpg
+  - assets/map/T3_LD_IA.jpg
+  - assets/map/T3_L1_DA.jpg
+  - assets/map/T3_L1_IA.jpg
+  - assets/map/T3_L2.jpg
+
+  - assets/path/T1_L1.png
+  - assets/path/T1_L2.png
+  - assets/path/T2_L1.png
+  - assets/path/T2_L2.png
+  - assets/path/T3_GP_DA.png
+  - assets/path/T3_GP_IA.png
+  - assets/path/T3_LD_DA.png
+  - assets/path/T3_LD_IA.png
+  - assets/path/T3_L1_DA.png
+  - assets/path/T3_L1_IA.png
+  - assets/path/T3_L2.png
