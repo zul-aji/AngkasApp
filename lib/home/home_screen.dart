@@ -1,3 +1,4 @@
+import 'package:angkasapp/map/map_navigate.dart';
 import 'package:angkasapp/reminder/reminder_list.dart';
 import 'package:angkasapp/reminder_util.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,22 @@ class _HomePageState extends State<HomePage> {
               onPressed: () => Navigator.push(
                   context, MaterialPageRoute(builder: (context) => MapPick())),
               child: const Text(
-                'Airport Map',
+                'Find a Location',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            const SizedBox(height: 50),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8), // Border radius
+                ),
+              ),
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MapNavigate())),
+              child: const Text(
+                'Get Navigated',
                 style: TextStyle(fontSize: 20),
               ),
             ),

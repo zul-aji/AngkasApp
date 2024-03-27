@@ -62,10 +62,10 @@ bool isPath(int pixel) {
   // Define your target color values
   int targetRed = 0;
   int targetGreen = 255;
-  int targetBlue = 43;
+  int targetBlue = 0;
 
   // Define a tolerance range for each color channel
-  int tolerance = 10;
+  int tolerance = 0;
 
   // Check if the pixel is a path based on the tolerance range
   if ((red >= targetRed - tolerance && red <= targetRed + tolerance) &&

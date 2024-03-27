@@ -55,8 +55,7 @@ class DotMap extends CustomPainter {
         if (grid[i][j] == 1) {
           // If the cell has a value of 1, paint it with a specific color
           // final Offset coordinate = Offset(j.toDouble() - 1.5, i.toDouble() - 1.5);
-          final Offset coordinate =
-              Offset(j.toDouble() - 1.5, i.toDouble() - 1.5);
+          final Offset coordinate = Offset(j.toDouble(), i.toDouble());
           canvas.drawCircle(coordinate, 0.3, paintDot);
           // print("(x = $j, y = $i)");
         }

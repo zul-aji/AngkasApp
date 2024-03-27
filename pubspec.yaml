@@ -43,6 +43,7 @@ flutter:
   uses-material-design: true
   assets:
   - assets/Pin.png
+  - assets/Navigate.png
 
   - assets/map/T1_L1.jpg
   - assets/map/T1_L2.jpg
