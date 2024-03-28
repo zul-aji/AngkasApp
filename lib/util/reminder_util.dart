@@ -1,4 +1,4 @@
-import 'package:angkasapp/const.dart';
+import 'package:angkasapp/util/const.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
@@ -7,8 +7,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import 'response/flight_details.dart';
-import 'response/schedule_flights.dart';
+import '../response/flight_details.dart';
+import '../response/schedule_flights.dart';
 
 late Box arrBox;
 late Box depBox;

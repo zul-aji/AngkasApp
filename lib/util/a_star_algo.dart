@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:tuple/tuple.dart';
 
 import 'const.dart';
-import 'map_path_set.dart';
+import 'map_util.dart';
 
 typedef Pair = Tuple2<int, int>;
 typedef pPair = Tuple2<double, Pair>;
@@ -524,10 +524,10 @@ void aStarTemp() {
   aStarSearch(grid, grid.length, src, dest);
 }
 
-aStarTry() async {
-  List<List<int>> grid = await setMapList(T2L1p);
-  Pair src = const Pair(242, 55);
-  Pair dest = const Pair(240, 302);
+aStarTry(int xSrc, int ySrc, int xDest, int yDest, String path) async {
+  List<List<int>> grid = await setMapList(path);
+  Pair src = Pair(ySrc, xSrc);
+  Pair dest = Pair(yDest, xDest);
 
   return aStarSearch(grid, grid.length, src, dest);
 }

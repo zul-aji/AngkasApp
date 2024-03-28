@@ -1,6 +1,6 @@
 import 'package:angkasapp/map/map_navigate.dart';
 import 'package:angkasapp/reminder/reminder_list.dart';
-import 'package:angkasapp/reminder_util.dart';
+import 'package:angkasapp/util/reminder_util.dart';
 import 'package:flutter/material.dart';
 
 import '../flight/find_flight.dart';
@@ -77,8 +77,8 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => MapNavigate())),
-              child: const Text(
-                'Get Navigated',
+              child: Text(
+                'Get Directions',
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               child: const Text(
-                'Flight Schedule',
+                'Flights in Soetta',
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               child: const Text(
-                'Find Flight',
+                'Find a Flight',
                 style: TextStyle(fontSize: 20),
               ),
             ),

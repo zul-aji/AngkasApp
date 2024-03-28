@@ -2,8 +2,9 @@ import 'package:angkasapp/map/map_overlay.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../const.dart';
+import '../util/const.dart';
 import 'map_navigate.dart';
+import 'map_painter.dart';
 
 class MapPick extends StatefulWidget {
   const MapPick({Key? key}) : super(key: key);
@@ -20,13 +21,13 @@ class _MapPickState extends State<MapPick> {
   List<Location> filteredCategory = [];
   List<Location> filteredLocation = [];
 
-  // String tMap = locList[0].tPath;
-  // double xMap = locList[0].xValue;
-  // double yMap = locList[0].yValue;
+  String tMap = mapLink(locList[0].terminal, locList[0].floor);
+  int xMap = locList[0].xValue;
+  int yMap = locList[0].yValue;
   String? lName;
-  String? tMap;
-  double? xMap;
-  double? yMap;
+  // String? tMap;
+  // int? xMap;
+  // int? yMap;
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +49,15 @@ class _MapPickState extends State<MapPick> {
                     height: 360,
                     child: Stack(
                       children: [
-                        tMap != null ? Image.asset(tMap!) : Image.asset(T1L1),
+                        tMap != null
+                            ? Image.asset(tMap!)
+                            : Image.asset(mapLink('1', '1')),
                         Visibility(
                           visible:
                               (xMap == null && yMap == null) ? false : true,
                           child: Positioned(
-                              left: xMap,
-                              top: yMap,
+                              left: xMap!.toDouble(),
+                              top: yMap!.toDouble(),
                               child: Image.asset(
                                 'assets/Pin.png',
                                 scale: 5,
@@ -79,7 +82,7 @@ class _MapPickState extends State<MapPick> {
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
                             blurRadius: 3,
-                            offset: Offset(0, 3),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
@@ -90,13 +93,17 @@ class _MapPickState extends State<MapPick> {
                         children: [
                           IconButton(
                               onPressed: () => Navigator.pop(context),
-                              icon: Icon(Icons.arrow_back_ios)),
+                              icon: const Icon(Icons.arrow_back_ios)),
                           Text(lName ?? "Pick a Location"),
                           IconButton(
-                              onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MapNavigate())),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MapNavigate()));
+                              },
                               icon: Image.asset(
                                 'assets/Navigate.png',
                                 scale: 20,
@@ -115,7 +122,7 @@ class _MapPickState extends State<MapPick> {
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
                           blurRadius: 5,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -130,7 +137,7 @@ class _MapPickState extends State<MapPick> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Terminal",
                                     style: TextStyle(
                                       fontSize: 20,
@@ -172,7 +179,7 @@ class _MapPickState extends State<MapPick> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Category",
                                     style: TextStyle(
                                       fontSize: 20,
@@ -219,11 +226,11 @@ class _MapPickState extends State<MapPick> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Location",
                               style: TextStyle(
                                 fontSize: 20,
@@ -263,7 +270,7 @@ class _MapPickState extends State<MapPick> {
                             )
                           ],
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                         // Button to change map
                         GestureDetector(
                           onTap: () {
@@ -275,7 +282,8 @@ class _MapPickState extends State<MapPick> {
                                     loc.terminal == selectedTerminal &&
                                     loc.category == selectedCategory &&
                                     loc.name == selectedLocation);
-                                tMap = location.tMap;
+                                tMap =
+                                    mapLink(location.terminal, location.floor);
                                 xMap = location.xMap;
                                 yMap = (360 - location.yMap);
                                 lName =
@@ -285,12 +293,12 @@ class _MapPickState extends State<MapPick> {
                             });
                           },
                           child: Container(
-                            padding: EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.all(15.0),
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                                 color: Colors.deepOrange.shade400,
                                 borderRadius: BorderRadius.circular(8)),
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "Find Location",
                                 style: TextStyle(

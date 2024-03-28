@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../custom_widgets.dart';
+import '../util/custom_widgets.dart';
 import '../response/schedule_flights.dart';
-import '../service/airlabs_request.dart';
+import '../airlabs_api/airlabs_request.dart';
 
 class FlightSchedule extends StatefulWidget {
   const FlightSchedule({super.key});

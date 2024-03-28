@@ -1,3 +1,4 @@
+import 'package:angkasapp/map/map_navigate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -5,7 +6,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'home/home_screen.dart';
 import 'map/map_overlay.dart';
 import 'map/map_pick.dart';
-import 'reminder_util.dart';
+import 'util/reminder_util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,10 +41,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: HomePage(),
       home: MapOverlay(),
+      // home: MapNavigate(),
       // home: MapPick(),
     );
   }

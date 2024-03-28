@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../const.dart';
+import '../util/const.dart';
 import '../response/airline_details.dart';
 import '../response/flight_details.dart';
 import '../response/schedule_flights.dart';

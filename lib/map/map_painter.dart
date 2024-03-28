@@ -1,7 +1,8 @@
+import 'package:angkasapp/util/const.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
-import '../a_star_algo.dart';
-import '../map_path_set.dart';
+import '../util/a_star_algo.dart';
+import '../util/map_util.dart';
 
 typedef Pair = Tuple2<int, int>;
 
@@ -19,10 +20,9 @@ class PathMap extends CustomPainter {
     for (int i = 0; i < trace.length; i++) {
       if (i + 1 < trace.length) {
         final Path path = Path()
-          ..moveTo(
-              trace[i].item2.toDouble() - 1.5, trace[i].item1.toDouble() - 1.5)
-          ..lineTo(trace[i + 1].item2.toDouble() - 1.5,
-              trace[i + 1].item1.toDouble() - 1.5);
+          ..moveTo(trace[i].item2.toDouble(), trace[i].item1.toDouble())
+          ..lineTo(
+              trace[i + 1].item2.toDouble(), trace[i + 1].item1.toDouble());
         canvas.drawPath(path, paint);
       }
     }
@@ -63,10 +63,10 @@ class DotMap extends CustomPainter {
     }
 
     canvas.drawCircle(
-      const Offset(302, 240),
-      1,
+      const Offset(277, 222),
+      0.5,
       Paint()
-        ..color = Colors.green
+        ..color = Colors.red
         ..style = PaintingStyle.fill,
     );
   }
@@ -83,6 +83,6 @@ Future<DotMap> createDotMap(String path) async {
 }
 
 Future<PathMap> createPathMap() async {
-  List<Pair> trace = await aStarTry();
+  List<Pair> trace = await aStarTry(38, 215, 90, 187, mapLink("1", "2"));
   return PathMap(trace: trace);
 }

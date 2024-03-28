@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../response/flight_details.dart';
-import '../service/airlabs_request.dart';
+import '../airlabs_api/airlabs_request.dart';
 import 'flight_details.dart';
 
 class FindFlight extends StatefulWidget {

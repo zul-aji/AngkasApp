@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../custom_widgets.dart';
-import '../reminder_util.dart';
+import '../util/custom_widgets.dart';
+import '../util/reminder_util.dart';
 import '../response/flight_details.dart';
 
 class ReminderList extends StatefulWidget {

@@ -1,23 +1,30 @@
 import 'dart:typed_data';
-import 'package:angkasapp/a_star_algo.dart';
+import 'package:angkasapp/util/a_star_algo.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tuple/tuple.dart';
-import '../const.dart';
-import '../map_path_set.dart';
+import '../util/const.dart';
+import '../util/map_util.dart';
 import 'map_painter.dart';
 
 typedef Pair = Tuple2<int, int>;
 
 class MapOverlay extends StatelessWidget {
-  const MapOverlay({super.key});
+  MapOverlay({
+    super.key,
+    // required this.navList,
+  });
+  // final List<Location> navList;
+
+  String mapImage = mapLink(locList[0].terminal, locList[0].floor);
+  String mapPath = pathLink(locList[0].terminal, locList[0].floor);
+  int xMap = locList[0].xValue;
+  int yMap = locList[0].yValue;
 
   @override
   Widget build(BuildContext context) {
     bool paintTrace = false;
-    String mapImage = T2L2;
-    String mapPath = T2L2p;
     return Scaffold(
       body: Center(
         child: Container(
@@ -55,13 +62,20 @@ class MapOverlay extends StatelessWidget {
                         //     if (snapshot.connectionState ==
                         //         ConnectionState.done) {
                         //       return CustomPaint(
-                        //         painter: snapshot.data!,
+                        //         painter: snapshot.data,
                         //       );
                         //     } else {
                         //       return const CircularProgressIndicator();
                         //     }
                         //   },
-                        // )
+                        // ),
+                        // Positioned(
+                        //     left: xMap!.toDouble(),
+                        //     top: yMap!.toDouble(),
+                        //     child: Image.asset(
+                        //       'assets/Pin.png',
+                        //       scale: 5,
+                        //     )),
                       ],
                     ),
                   ),
