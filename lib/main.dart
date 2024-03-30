@@ -44,9 +44,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: HomePage(),
-      home: MapOverlay(),
+      // home: MapOverlay(),
       // home: MapNavigate(),
-      // home: MapPick(),
+      home: MapPick(),
     );
   }
 }

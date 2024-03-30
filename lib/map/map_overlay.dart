@@ -17,10 +17,11 @@ class MapOverlay extends StatelessWidget {
   });
   // final List<Location> navList;
 
-  String mapImage = mapLink(locList[0].terminal, locList[0].floor);
-  String mapPath = pathLink(locList[0].terminal, locList[0].floor);
-  int xMap = locList[0].xValue;
-  int yMap = locList[0].yValue;
+  static const int index = 0;
+  String mapImage = mapLink(locList[index].terminal, locList[index].floor);
+  String mapPath = pathLink(locList[index].terminal, locList[index].floor);
+  int xMap = locList[index].xValue;
+  int yMap = locList[index].yValue;
 
   @override
   Widget build(BuildContext context) {
