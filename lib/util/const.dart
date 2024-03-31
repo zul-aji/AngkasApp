@@ -122,6 +122,10 @@ List<Security> secList = [
   const Security("2", 181, 195, "2", 151, 202, "1"),
   // Terminal 2 Gate F
   const Security("2", 281, 219, "2", 231, 211, "1"),
+  // Terminal 3 Gate International
+  const Security("3", 73, 131, "3", 262, 194, "1"),
+  // Terminal 3 Gate Domestic
+  const Security("3", 289, 146, "3", 100, 169, "1"),
 ];
 
 final eleList = [
@@ -158,6 +162,41 @@ final eleList = [
   const Elevate("2", 128, 227, "2", 131, 225, "1"),
   const Elevate("2", 113, 240, "2", 110, 245, "1"),
   const Elevate("2", 85, 224, "2", 85, 224, "1"),
+
+  // Terminal 3 Floor 1
+  // To Domestic/To International Area
+  const Elevate("3", 337, 219, "1I", 27, 217, "1D"),
+  const Elevate("3", 27, 217, "1D", 337, 219, "1I"),
+
+  // Elevator
+  const Elevate("3", 122, 157, "1D", 114, 251, "2D"),
+  const Elevate("3", 118, 202, "1D", 90, 180, "PD"),
+  const Elevate("3", 118, 202, "1D", 294, 181, "3"),
+  const Elevate("3", 254, 158, "1I", 242, 253, "2I"),
+  const Elevate("3", 237, 206, "1I", 270, 180, "PI"),
+  const Elevate("3", 237, 206, "1I", 66, 181, "3"),
+
+  // Terminal 3 Floor 2
+  // To Domestic/To International Area
+  const Elevate("3", 330, 226, "2I", 21, 224, "2D"),
+  const Elevate("3", 21, 224, "2D", 330, 226, "2I"),
+  const Elevate("3", 330, 238, "2I", 21, 234, "2D"),
+  const Elevate("3", 21, 234, "2D", 330, 238, "2I"),
+
+  // Elevator
+  const Elevate("3", 90, 180, "PD", 118, 202, "1D"),
+  const Elevate("3", 270, 180, "PI", 237, 206, "1I"),
+  const Elevate("3", 90, 180, "PD", 294, 181, "3"),
+  const Elevate("3", 270, 180, "PI", 66, 181, "3"),
+
+  // Terminal 3 Floor 3
+  // Elevator
+  const Elevate("3", 118, 132, "3", 285, 239, "2I"),
+  const Elevate("3", 241, 130, "3", 69, 239, "2D"),
+  const Elevate("3", 294, 181, "3", 90, 180, "PD"),
+  const Elevate("3", 66, 181, "3", 270, 180, "PI"),
+  const Elevate("3", 294, 181, "3", 118, 202, "1D"),
+  const Elevate("3", 66, 181, "3", 237, 206, "1I"),
 ];
 
 const conLoc = [];
@@ -165,7 +204,8 @@ const conLoc = [];
 List<Location> locList = [
   Location("Test", "Baggage Claim", "1", "1", 83, 211, 0, 0, false, secList[0]),
 
-  // Gate Terminal 1 Floor 1
+  // Terminal 1 Floor 1
+  // Arrival Gate
   Location("Gate A1/2 Arrivals", "Arrival Gate", "1", "1", 37, 215, 34, 219,
       false, secList[0]),
   Location("Gate A3/4 Arrivals", "Arrival Gate", "1", "1", 28, 204, 23, 205,
@@ -209,7 +249,8 @@ List<Location> locList = [
   Location("Gate C7 Arrivals", "Arrival Gate", "1", "1", 322, 215, 326, 219,
       false, secList[2]),
 
-  // Gate Terminal 1 Floor 2
+  // Terminal 1 Floor 2
+  // Gate
   Location("Gate A1/2", "Gate", "1", "2", 50, 217, 48, 221, false, secList[0]),
   Location("Gate A3/4", "Gate", "1", "2", 42, 205, 37, 208, false, secList[0]),
   Location("Gate A5/6", "Gate", "1", "2", 35, 189, 30, 191, false, secList[0]),
@@ -234,24 +275,8 @@ List<Location> locList = [
   Location("Gate C6", "Gate", "1", "2", 318, 205, 323, 207, false, secList[2]),
   Location("Gate C7", "Gate", "1", "2", 310, 217, 313, 221, false, secList[2]),
 
-  // Baggage Claim
-  Location("Baggage Claim Gate A", "Baggage Claim", "1", "1", 90, 187, 87, 185,
-      false, secList[0]),
-  Location("Baggage Claim Gate B", "Baggage Claim", "1", "1", 209, 158, 210,
-      152, false, secList[1]),
-  Location("Baggage Claim Gate C", "Baggage Claim", "1", "1", 307, 234, 312,
-      232, false, secList[2]),
-
-  //Drop-Off
-  Location("Drop-Off", "Arrival Gate", "1", "1", 322, 215, 326, 219, false,
-      secList[2]),
-
-  //SkyTrain
-  Location("Skytrain", "Skytrain", "1", "1", 181, 214, 181, 220, true, null),
-  Location("Skytrain", "Skytrain", "2", "1", 180, 235, 180, 240, true, null),
-  Location("Skytrain", "Skytrain", "3", "3", 180, 238, 180, 244, true, null),
-
-  // Gate Terminal 2 Floor 1
+  // Terminal 2 Floor 1
+  // Arrival Gate
   Location("Gate D1 Arrivals", "Arrival Gate", "2", "1", 55, 242, 50, 250,
       false, secList[3]),
   Location("Gate D2 Arrivals", "Arrival Gate", "2", "1", 42, 228, 35, 232,
@@ -295,7 +320,8 @@ List<Location> locList = [
   Location("Gate F7 Arrivals", "Arrival Gate", "2", "1", 305, 243, 310, 249,
       false, secList[5]),
 
-  //Gate Terminal 2 Floor 2
+  // Terminal 2 Floor 2
+  // Gate
   Location("Gate D1", "Gate", "2", "2", 56, 241, 54, 250, false, secList[3]),
   Location("Gate D2", "Gate", "2", "2", 42, 227, 37, 232, false, secList[3]),
   Location("Gate D3", "Gate", "2", "2", 32, 207, 28, 212, false, secList[3]),
@@ -317,4 +343,99 @@ List<Location> locList = [
   Location("Gate F5", "Gate", "2", "2", 329, 207, 335, 212, false, secList[5]),
   Location("Gate F6", "Gate", "2", "2", 320, 227, 325, 232, false, secList[5]),
   Location("Gate F7", "Gate", "2", "2", 306, 242, 308, 249, false, secList[5]),
+
+  // Terminal 3 Floor 1I
+  // Arrival Gate
+  Location("Gate 5 Arrivals", "Arrival Gate", "3", "1I", 117, 140, 117, 134,
+      false, secList[6]),
+  Location("Gate 6 Arrivals", "Arrival Gate", "3", "1I", 161, 140, 161, 134,
+      false, secList[6]),
+  Location("Gate 7 Arrivals", "Arrival Gate", "3", "1I", 201, 140, 201, 134,
+      false, secList[6]),
+  Location("Gate 8 Arrivals", "Arrival Gate", "3", "1I", 244, 140, 244, 134,
+      false, secList[6]),
+  Location("Gate 9 Arrivals", "Arrival Gate", "3", "1I", 284, 139, 284, 134,
+      false, secList[6]),
+  Location("Gate 10 Arrivals", "Arrival Gate", "3", "1I", 323, 140, 323, 134,
+      false, secList[6]),
+
+  // Terminal 3 Floor 1D
+  // Arrival Gate
+  Location("Gate 11 Arrivals", "Arrival Gate", "3", "1D", 43, 144, 34, 135,
+      false, secList[7]),
+  Location("Gate 12 Arrivals", "Arrival Gate", "3", "1D", 81, 144, 81, 135,
+      false, secList[7]),
+  Location("Gate 13 Arrivals", "Arrival Gate", "3", "1D", 118, 142, 118, 135,
+      false, secList[7]),
+  Location("Gate 14 Arrivals", "Arrival Gate", "3", "1D", 160, 143, 160, 135,
+      false, secList[7]),
+  Location("Gate 15 Arrivals", "Arrival Gate", "3", "1D", 198, 141, 198, 135,
+      false, secList[7]),
+  Location("Gate 16 Arrivals", "Arrival Gate", "3", "1D", 240, 142, 240, 135,
+      false, secList[7]),
+  Location("Gate 17 Arrivals", "Arrival Gate", "3", "1D", 283, 141, 283, 135,
+      false, secList[7]),
+
+  // Terminal 3 Floor 2I
+  // Gate
+  Location("Gate 5", "Gate", "3", "2I", 117, 226, 117, 223, false, secList[6]),
+  Location("Gate 6", "Gate", "3", "2I", 159, 226, 159, 223, false, secList[6]),
+  Location("Gate 7", "Gate", "3", "2I", 196, 226, 196, 223, false, secList[6]),
+  Location("Gate 8", "Gate", "3", "2I", 238, 226, 238, 223, false, secList[6]),
+  Location("Gate 9", "Gate", "3", "2I", 274, 226, 274, 223, false, secList[6]),
+  Location("Gate 10", "Gate", "3", "2I", 312, 226, 312, 223, false, secList[6]),
+
+  // Terminal 3 Floor 2D
+  // Gate
+  Location("Gate 11", "Gate", "3", "2D", 34, 224, 34, 221, false, secList[7]),
+  Location("Gate 12", "Gate", "3", "2D", 70, 224, 70, 221, false, secList[7]),
+  Location("Gate 13", "Gate", "3", "2D", 107, 224, 107, 221, false, secList[7]),
+  Location("Gate 14", "Gate", "3", "2D", 144, 224, 144, 221, false, secList[7]),
+  Location("Gate 15", "Gate", "3", "2D", 181, 224, 181, 221, false, secList[7]),
+  Location("Gate 16", "Gate", "3", "2D", 218, 224, 218, 221, false, secList[7]),
+  Location("Gate 17", "Gate", "3", "2D", 252, 224, 252, 221, false, secList[7]),
+
+  // Ticketing
+  // Terminal 1
+  Location("Check-In Gate A", "Check-In", "1", "1", 49, 233, 46, 233, false,
+      secList[0]),
+  Location("Check-In Gate B", "Check-In", "1", "1", 153, 156, 149, 155, false,
+      secList[1]),
+  Location("Check-In Gate C", "Check-In", "1", "1", 268, 185, 268, 182, false,
+      secList[2]),
+
+  // Terminal 2
+  Location("Check-In Gate D/E", "Check-In", "2", "2", 134, 210, 129, 210, true,
+      null),
+  Location(
+      "Check-In Gate E", "Check-In", "2", "2", 204, 202, 204, 200, true, null),
+  Location(
+      "Check-In Gate F", "Check-In", "2", "2", 238, 216, 237, 211, true, null),
+
+  // Terminal 3
+  Location("Check-In Island A", "Check-In", "3", "3", 109, 179, 109, 165, true,
+      null),
+  Location("Check-In Island B", "Check-In", "3", "3", 131, 179, 131, 165, true,
+      null),
+  Location("Check-In Island C", "Check-In", "3", "3", 154, 179, 154, 165, true,
+      null),
+  Location("Check-In Island D", "Check-In", "3", "3", 206, 179, 206, 165, true,
+      null),
+  Location("Check-In Island E", "Check-In", "3", "3", 229, 179, 229, 165, true,
+      null),
+  Location("Check-In Island F", "Check-In", "3", "3", 251, 179, 251, 165, true,
+      null),
+
+  // Baggage Claim
+  Location("Baggage Claim Gate A", "Baggage Claim", "1", "1", 90, 187, 87, 185,
+      false, secList[0]),
+  Location("Baggage Claim Gate B", "Baggage Claim", "1", "1", 209, 158, 210,
+      152, false, secList[1]),
+  Location("Baggage Claim Gate C", "Baggage Claim", "1", "1", 307, 234, 312,
+      232, false, secList[2]),
+
+  //SkyTrain
+  Location("Skytrain", "Skytrain", "1", "1", 181, 214, 181, 220, true, null),
+  Location("Skytrain", "Skytrain", "2", "1", 180, 235, 180, 240, true, null),
+  Location("Skytrain", "Skytrain", "3", "3", 180, 238, 180, 244, true, null),
 ];

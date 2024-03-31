@@ -45,8 +45,8 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       // home: HomePage(),
       // home: MapOverlay(),
-      // home: MapNavigate(),
-      home: MapPick(),
+      home: MapNavigate(),
+      // home: MapPick(),
     );
   }
 }

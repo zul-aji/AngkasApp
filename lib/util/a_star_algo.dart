@@ -55,7 +55,7 @@ double calculateHValue(int row, int col, Pair dest) {
 // A Utility Function to trace the path from the source
 // to destination
 tracePath(List<List<Cell>> cellDetails, Pair dest) {
-  print("\nThe Path is ");
+  // print("\nThe Path is ");
   int row = dest.item1;
   int col = dest.item2;
 
@@ -73,7 +73,7 @@ tracePath(List<List<Cell>> cellDetails, Pair dest) {
   path.add(Pair(row, col));
   for (int i = 0; i < path.length; i++) {
     Pair p = path[i];
-    print("-> (${p.item1},${p.item2}) ");
+    // print("-> (${p.item1},${p.item2}) ");
   }
 
   return path;
@@ -85,30 +85,30 @@ tracePath(List<List<Cell>> cellDetails, Pair dest) {
 aStarSearch(List<List<int>> grid, int gridLength, Pair src, Pair dest) {
   // If the source is out of range
   if (!isValid(src.item1, src.item2, gridLength)) {
-    print("Source is invalid!");
+    // print("Source is invalid!");
     return;
   }
 
   // If the destination is out of range
   if (!isValid(dest.item1, dest.item2, gridLength)) {
-    print("Destination is invalid!");
+    // print("Destination is invalid!");
     return;
   }
 
   // Either the source or the destination is blocked
   if (!isUnBlocked(grid, src.item1, src.item2)) {
-    print("Source is not a path");
+    // print("Source is not a path");
     return;
   }
 
   if (!isUnBlocked(grid, dest.item1, dest.item2)) {
-    print("Destination is not a path");
+    // print("Destination is not a path");
     return;
   }
 
   // If the destination cell is the same as the source cell
   if (isDestination(src.item1, src.item2, dest)) {
-    print("We are already at the destination");
+    // print("We are already at the destination");
     return;
   }
 
@@ -217,7 +217,7 @@ aStarSearch(List<List<int>> grid, int gridLength, Pair src, Pair dest) {
         // Set the Parent of the destination cell
         cellDetails[i - 1][j].parent_i = i;
         cellDetails[i - 1][j].parent_j = j;
-        print("The destination cell is found");
+        // print("The destination cell is found");
 
         foundDest = true;
         return tracePath(cellDetails, dest);
@@ -263,7 +263,7 @@ aStarSearch(List<List<int>> grid, int gridLength, Pair src, Pair dest) {
         // Set the Parent of the destination cell
         cellDetails[i + 1][j].parent_i = i;
         cellDetails[i + 1][j].parent_j = j;
-        print("The destination cell is found");
+        // print("The destination cell is found");
 
         foundDest = true;
         return tracePath(cellDetails, dest);
@@ -309,7 +309,7 @@ aStarSearch(List<List<int>> grid, int gridLength, Pair src, Pair dest) {
         // Set the Parent of the destination cell
         cellDetails[i][j + 1].parent_i = i;
         cellDetails[i][j + 1].parent_j = j;
-        print("The destination cell is found");
+        // print("The destination cell is found");
 
         foundDest = true;
         return tracePath(cellDetails, dest);
@@ -356,7 +356,7 @@ aStarSearch(List<List<int>> grid, int gridLength, Pair src, Pair dest) {
         // Set the Parent of the destination cell
         cellDetails[i][j - 1].parent_i = i;
         cellDetails[i][j - 1].parent_j = j;
-        print("The destination cell is found");
+        // print("The destination cell is found");
 
         foundDest = true;
         return tracePath(cellDetails, dest);
@@ -403,7 +403,7 @@ aStarSearch(List<List<int>> grid, int gridLength, Pair src, Pair dest) {
         // Set the Parent of the destination cell
         cellDetails[i - 1][j + 1].parent_i = i;
         cellDetails[i - 1][j + 1].parent_j = j;
-        print("The destination cell is found");
+        // print("The destination cell is found");
 
         foundDest = true;
         return tracePath(cellDetails, dest);
@@ -450,7 +450,7 @@ aStarSearch(List<List<int>> grid, int gridLength, Pair src, Pair dest) {
         // Set the Parent of the destination cell
         cellDetails[i - 1][j - 1].parent_i = i;
         cellDetails[i - 1][j - 1].parent_j = j;
-        print("The destination cell is found");
+        // print("The destination cell is found");
 
         foundDest = true;
         return tracePath(cellDetails, dest);
@@ -494,7 +494,7 @@ aStarSearch(List<List<int>> grid, int gridLength, Pair src, Pair dest) {
   // there is no way to the destination cell (due to
   // blockages)
   if (foundDest == false) {
-    print("Failed to find the Destination Cell");
+    // print("Failed to find the Destination Cell");
   }
   return;
 }

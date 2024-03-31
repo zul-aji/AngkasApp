@@ -13,7 +13,7 @@ class PathMap extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
-      ..color = Colors.red
+      ..color = Colors.green
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
@@ -63,7 +63,7 @@ class DotMap extends CustomPainter {
     }
 
     canvas.drawCircle(
-      const Offset(277, 222),
+      const Offset(307, 234),
       0.5,
       Paint()
         ..color = Colors.red
@@ -82,7 +82,8 @@ Future<DotMap> createDotMap(String path) async {
   return DotMap(path: path, grid: grid);
 }
 
-Future<PathMap> createPathMap() async {
-  List<Pair> trace = await aStarTry(38, 215, 90, 187, mapLink("1", "2"));
+Future<PathMap> createPathMap(Location source, Location dest) async {
+  List<Pair> trace = await aStarTry(source.xValue, source.yValue, dest.xValue,
+      dest.yValue, pathLink(source.terminal, source.floor));
   return PathMap(trace: trace);
 }

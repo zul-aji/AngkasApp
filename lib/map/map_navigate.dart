@@ -91,7 +91,8 @@ class _MapNavigateState extends State<MapNavigate> {
                                   fromTerminal = terminalValue;
                                   filFromCategory = locList
                                       .where((location) =>
-                                          location.terminal == fromTerminal)
+                                          location.terminal == fromTerminal &&
+                                          location.category != 'Skytrain')
                                       .toList();
                                   fromCategory = null;
                                 });
@@ -403,14 +404,16 @@ class _MapNavigateState extends State<MapNavigate> {
                 if (initialLoc != null && destLoc != null) {
                   List<Location> navList =
                       await setNavigationList(initialLoc!, destLoc!);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MapOverlay(
-                          // navList: navList,
-                          ),
-                    ),
-                  );
+                  if (navList.isNotEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MapOverlay(
+                          navList: navList,
+                        ),
+                      ),
+                    );
+                  }
                 }
               },
               child: Container(
