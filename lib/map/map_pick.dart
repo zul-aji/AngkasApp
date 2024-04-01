@@ -1,13 +1,9 @@
-import 'package:angkasapp/map/map_overlay.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../util/const.dart';
 import 'map_navigate.dart';
-import 'map_painter.dart';
 
 class MapPick extends StatefulWidget {
-  const MapPick({Key? key}) : super(key: key);
+  const MapPick({super.key});
 
   @override
   State<MapPick> createState() => _MapPickState();
@@ -21,13 +17,10 @@ class _MapPickState extends State<MapPick> {
   List<Location> filteredCategory = [];
   List<Location> filteredLocation = [];
 
-  String tMap = mapLink(locList[0].terminal, locList[0].floor);
-  int xMap = locList[0].xValue;
-  int yMap = locList[0].yValue;
   String? lName;
-  // String? tMap;
-  // int? xMap;
-  // int? yMap;
+  String? tMap;
+  int? xMap;
+  int? yMap;
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +46,16 @@ class _MapPickState extends State<MapPick> {
                             ? Image.asset(tMap!)
                             : Image.asset(mapLink('1', '1')),
                         Visibility(
-                          visible:
-                              (xMap == null && yMap == null) ? false : true,
+                          visible: true,
+                          // (xMap == null && yMap == null) ? false : true,
                           child: Positioned(
-                              left: xMap!.toDouble(),
-                              top: yMap!.toDouble(),
-                              child: Image.asset(
-                                'assets/Pin.png',
-                                scale: 5,
+                              // left: xMap?.toDouble() ?? 0,
+                              // top: yMap?.toDouble() ?? 0,
+                              left: 360,
+                              top: 0,
+                              child: Icon(
+                                Icons.location_pin,
+                                color: Colors.grey,
                               )),
                         ),
                       ],
@@ -91,23 +86,34 @@ class _MapPickState extends State<MapPick> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          IconButton(
-                              onPressed: () => Navigator.pop(context),
-                              icon: const Icon(Icons.arrow_back_ios)),
-                          Text(lName ?? "Pick a Location"),
-                          IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const MapNavigate()));
-                              },
-                              icon: Image.asset(
-                                'assets/Navigate.png',
-                                scale: 20,
-                              ))
+                          Expanded(
+                            flex: 1,
+                            child: IconButton(
+                                onPressed: () => Navigator.pop(context),
+                                icon: const Icon(Icons.arrow_back_ios)),
+                          ),
+                          Expanded(
+                              flex: 5,
+                              child: Text(
+                                lName ?? "Pick a Location",
+                                textAlign: TextAlign.center,
+                              )),
+                          Expanded(
+                            flex: 1,
+                            child: IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MapNavigate()));
+                                },
+                                icon: Image.asset(
+                                  'assets/Navigate.png',
+                                  scale: 20,
+                                )),
+                          )
                         ],
                       ),
                     ),
@@ -285,9 +291,9 @@ class _MapPickState extends State<MapPick> {
                                 tMap =
                                     mapLink(location.terminal, location.floor);
                                 xMap = location.xMap;
-                                yMap = (360 - location.yMap);
+                                yMap = location.yMap;
                                 lName =
-                                    "Terminal ${location.terminal}, Floor ${location.floor}, ${location.name}";
+                                    'Terminal ${location.terminal}, Floor ${location.floor}\n${location.name}';
                                 print("coordinate: $xMap, $yMap");
                               }
                             });

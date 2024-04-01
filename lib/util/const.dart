@@ -202,8 +202,6 @@ final eleList = [
 const conLoc = [];
 
 List<Location> locList = [
-  Location("Test", "Baggage Claim", "1", "1", 83, 211, 0, 0, false, secList[0]),
-
   // Terminal 1 Floor 1
   // Arrival Gate
   Location("Gate A1/2 Arrivals", "Arrival Gate", "1", "1", 37, 215, 34, 219,

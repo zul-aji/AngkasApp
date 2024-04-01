@@ -1,11 +1,6 @@
-import 'dart:typed_data';
-import 'package:angkasapp/util/a_star_algo.dart';
-import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:tuple/tuple.dart';
 import '../util/const.dart';
-import '../util/map_util.dart';
 import 'map_painter.dart';
 
 typedef Pair = Tuple2<Location, Location>;
@@ -26,7 +21,6 @@ class _MapOverlayState extends State<MapOverlay> {
   @override
   Widget build(BuildContext context) {
     List<Pair> navPair = createPairs(widget.navList);
-    print("navList: ${navPair}");
     for (var i = 0; i < navPair.length; i++) {
       print("Step: ${i + 1}");
       print(
@@ -42,6 +36,7 @@ class _MapOverlayState extends State<MapOverlay> {
           child: Stack(
             children: [
               InteractiveViewer(
+                minScale: 1.0,
                 maxScale: 7.0,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -54,19 +49,6 @@ class _MapOverlayState extends State<MapOverlay> {
                       children: [
                         Image.asset(mapLink(navPair[index].item1.terminal,
                             navPair[index].item1.floor)),
-                        // FutureBuilder<DotMap>(
-                        //   future: createDotMap(mapPath),
-                        //   builder: (context, snapshot) {
-                        //     if (snapshot.connectionState ==
-                        //         ConnectionState.done) {
-                        //       return CustomPaint(
-                        //         painter: snapshot.data!,
-                        //       );
-                        //     } else {
-                        //       return const CircularProgressIndicator();
-                        //     }
-                        //   },
-                        // ),
                         FutureBuilder<PathMap>(
                           future: createPathMap(
                               navPair[index].item1, navPair[index].item2),
@@ -77,7 +59,10 @@ class _MapOverlayState extends State<MapOverlay> {
                                 painter: snapshot.data,
                               );
                             } else {
-                              return const CircularProgressIndicator();
+                              return Center(
+                                  child: CircularProgressIndicator(
+                                color: Colors.deepOrange.shade400,
+                              ));
                             }
                           },
                         ),
@@ -98,7 +83,7 @@ class _MapOverlayState extends State<MapOverlay> {
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
                             blurRadius: 3,
-                            offset: Offset(0, 3),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
@@ -109,11 +94,19 @@ class _MapOverlayState extends State<MapOverlay> {
                         children: [
                           IconButton(
                               onPressed: () => Navigator.pop(context),
-                              icon: Icon(Icons.arrow_back_ios)),
+                              icon: const Icon(Icons.arrow_back_rounded)),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: Text(
+                              "Terminal ${navPair[index].item1.terminal}, Floor ${navPair[index].item1.floor}",
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          )
                         ],
                       ),
                     ),
                   ),
+
                   // Button to change map
                   Container(
                     margin: const EdgeInsets.all(15.0),
@@ -125,17 +118,49 @@ class _MapOverlayState extends State<MapOverlay> {
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
                           blurRadius: 5,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
                     child: Column(
                       children: [
-                        Text(
-                            "${navPair[index].item1.name} -> ${navPair[index].item2.name}"),
                         Container(
+                          margin: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  navPair[index].item1.name,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 20),
+                                ),
+                              ),
+                              const Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.arrow_forward_rounded,
+                                    size: 30,
+                                  )),
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  navPair[index].item2.name,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 20),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
                           width: MediaQuery.of(context).size.width,
-                          child: index == 0 || index == navPair.length - 2
+                          child: index == 0 || index == navPair.length - 1
                               ? GestureDetector(
                                   onTap: () {
                                     if (index == 0) {
@@ -149,18 +174,38 @@ class _MapOverlayState extends State<MapOverlay> {
                                     }
                                   },
                                   child: Container(
-                                    padding: EdgeInsets.all(15.0),
+                                    padding: const EdgeInsets.all(15.0),
                                     width: MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
                                         color: Colors.deepOrange.shade400,
                                         borderRadius: BorderRadius.circular(8)),
                                     child: Center(
-                                      child: Text(
-                                        index == 0 ? "Next" : "Previous",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Visibility(
+                                            visible: index != 0,
+                                            child: const Icon(
+                                              Icons.arrow_back_ios_new_rounded,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          Text(
+                                            index == 0 ? "Next" : "Previous",
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 18),
+                                          ),
+                                          Visibility(
+                                            visible: index == 0,
+                                            child: const Icon(
+                                              Icons.arrow_forward_ios_rounded,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -176,21 +221,34 @@ class _MapOverlayState extends State<MapOverlay> {
                                           });
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.all(15.0),
-                                          margin: EdgeInsets.all(5.0),
+                                          padding: const EdgeInsets.all(15.0),
+                                          margin:
+                                              const EdgeInsets.only(right: 5.0),
                                           width:
                                               MediaQuery.of(context).size.width,
                                           decoration: BoxDecoration(
                                               color: Colors.deepOrange.shade400,
                                               borderRadius:
                                                   BorderRadius.circular(8)),
-                                          child: Center(
-                                            child: Text(
-                                              "Previous",
-                                              style: TextStyle(
+                                          child: const Center(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Icon(
+                                                  Icons
+                                                      .arrow_back_ios_new_rounded,
                                                   color: Colors.white,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 18),
+                                                ),
+                                                Text(
+                                                  "Previous",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 18),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -205,21 +263,34 @@ class _MapOverlayState extends State<MapOverlay> {
                                           });
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.all(15.0),
-                                          margin: EdgeInsets.all(5.0),
+                                          padding: const EdgeInsets.all(15.0),
+                                          margin:
+                                              const EdgeInsets.only(left: 5.0),
                                           width:
                                               MediaQuery.of(context).size.width,
                                           decoration: BoxDecoration(
                                               color: Colors.deepOrange.shade400,
                                               borderRadius:
                                                   BorderRadius.circular(8)),
-                                          child: Center(
-                                            child: Text(
-                                              "Next",
-                                              style: TextStyle(
+                                          child: const Center(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Text(
+                                                  "Next",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 18),
+                                                ),
+                                                Icon(
+                                                  Icons
+                                                      .arrow_forward_ios_rounded,
                                                   color: Colors.white,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 18),
+                                                )
+                                              ],
                                             ),
                                           ),
                                         ),

@@ -190,11 +190,21 @@ setNavigationList(Location initial, Location destination) async {
   Location tempInit = initial;
   Location tempDest = destination;
   List<Location> navigations = [];
-  navigations.add(tempInit);
+
+  if (initial.name == destination.name) {
+    return navigations;
+  }
+
+  void addNavigation(Location location) {
+    navigations.add(location);
+    tempInit = location;
+  }
+
+  addNavigation(tempInit);
   //private source and public destination
-  if (!tempInit.public && destination.public) {
+  if ((!tempInit.public && destination.public) ||
+      (!tempInit.public && (tempInit.terminal != destination.terminal))) {
     security = false;
-    tempDest = destination;
     destination = createLoc(
         true,
         tempInit.security!.terminal,
@@ -205,112 +215,46 @@ setNavigationList(Location initial, Location destination) async {
       if (tempInit.terminal == destination.terminal) {
         if (tempInit.floor == destination.floor) {
           // NavDone
-          navigations.add(destination);
-          tempInit = destination;
+          addNavigation(destination);
           destination = tempDest;
           security = true;
-          // public source and public destination
-          while (tempInit.terminal != destination.terminal &&
-              tempInit.floor != destination.floor &&
-              tempInit.xValue != destination.xValue &&
-              tempInit.yValue != destination.yValue) {
-            if (tempInit.terminal == destination.terminal) {
-              if (tempInit.floor == destination.floor) {
-                // NavDone
-                navigations.add(destination);
-                tempInit = destination;
-              } else {
-                Elevate tempLV =
-                    await closestElevate(tempInit, destination.floor);
-                navigations.add(createLoc(false, tempLV.terminal,
-                    tempLV.inFloor, tempLV.xValue, tempLV.yValue));
-                Location currLoc = createLoc(false, tempLV.terminal,
-                    tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-                navigations.add(currLoc);
-                tempInit = currLoc;
-              }
-            } else {
-              if (tempInit.terminal != '3' && tempInit.floor == '1') {
-                navigations.add(await closestDest(tempInit, "Skytrain"));
-                var newTerminal = locList.firstWhere((loc) =>
-                    loc.terminal == destination.terminal &&
-                    loc.category == "Skytrain");
-                navigations.add(newTerminal);
-                tempInit = newTerminal;
-              } else if (tempInit.terminal != '3' && tempInit.floor != '1') {
-                Elevate tempLV = await closestElevate(tempInit, '1');
-                navigations.add(createLoc(false, tempLV.terminal,
-                    tempLV.inFloor, tempLV.xValue, tempLV.yValue));
-                Location currLoc = createLoc(false, tempLV.terminal,
-                    tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-                navigations.add(currLoc);
-                tempInit = currLoc;
-              } else if (tempInit.terminal == '3' && tempInit.floor == '3') {
-                navigations.add(await closestDest(tempInit, "Skytrain"));
-                var newTerminal = locList.firstWhere((loc) =>
-                    loc.terminal == destination.terminal &&
-                    loc.category == "Skytrain");
-                navigations.add(newTerminal);
-                tempInit = newTerminal;
-              } else if (tempInit.terminal == '3' && tempInit.floor != '3') {
-                Elevate tempLV = await closestElevate(tempInit, '3');
-                navigations.add(createLoc(false, tempLV.terminal,
-                    tempLV.inFloor, tempLV.xValue, tempLV.yValue));
-                Location currLoc = createLoc(false, tempLV.terminal,
-                    tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-                navigations.add(currLoc);
-                tempInit = currLoc;
-              }
-            }
-          }
         } else {
           Elevate tempLV = await closestElevate(tempInit, destination.floor);
           navigations.add(createLoc(false, tempLV.terminal, tempLV.inFloor,
               tempLV.xValue, tempLV.yValue));
-          Location currLoc = createLoc(
-              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-          navigations.add(currLoc);
-          tempInit = currLoc;
+          addNavigation(createLoc(
+              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo));
         }
       } else {
         if (tempInit.terminal != '3' && tempInit.floor == '1') {
-          navigations.add(await closestDest(tempInit, "Skytrain"));
-          var newTerminal = locList.firstWhere((loc) =>
+          addNavigation(await closestDest(tempInit, "Skytrain"));
+          addNavigation(locList.firstWhere((loc) =>
               loc.terminal == destination.terminal &&
-              loc.category == "Skytrain");
-          navigations.add(newTerminal);
-          tempInit = newTerminal;
+              loc.category == "Skytrain"));
         } else if (tempInit.terminal != '3' && tempInit.floor != '1') {
           Elevate tempLV = await closestElevate(tempInit, '1');
-          navigations.add(createLoc(false, tempLV.terminal, tempLV.inFloor,
+          addNavigation(createLoc(false, tempLV.terminal, tempLV.inFloor,
               tempLV.xValue, tempLV.yValue));
-          Location currLoc = createLoc(
-              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-          navigations.add(currLoc);
-          tempInit = currLoc;
+          addNavigation(createLoc(
+              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo));
         } else if (tempInit.terminal == '3' && tempInit.floor == '3') {
-          navigations.add(await closestDest(tempInit, "Skytrain"));
-          var newTerminal = locList.firstWhere((loc) =>
+          addNavigation(await closestDest(tempInit, "Skytrain"));
+          addNavigation(locList.firstWhere((loc) =>
               loc.terminal == destination.terminal &&
-              loc.category == "Skytrain");
-          navigations.add(newTerminal);
-          tempInit = newTerminal;
+              loc.category == "Skytrain"));
         } else if (tempInit.terminal == '3' && tempInit.floor != '3') {
           Elevate tempLV = await closestElevate(tempInit, '3');
-          navigations.add(createLoc(false, tempLV.terminal, tempLV.inFloor,
+          addNavigation(createLoc(false, tempLV.terminal, tempLV.inFloor,
               tempLV.xValue, tempLV.yValue));
-          Location currLoc = createLoc(
-              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-          navigations.add(currLoc);
-          tempInit = currLoc;
+          addNavigation(createLoc(
+              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo));
         }
       }
     }
   }
   //private destination
-  if (!destination.public) {
+  if (tempInit.terminal == destination.terminal && !destination.public) {
     security = false;
-    tempDest = destination;
     destination = createLoc(
         true,
         destination.security!.terminal,
@@ -321,105 +265,80 @@ setNavigationList(Location initial, Location destination) async {
       if (tempInit.terminal == destination.terminal) {
         if (tempInit.floor == destination.floor) {
           // NavDone
-          navigations.add(destination);
-          tempInit = destination;
+          addNavigation(destination);
           destination = tempDest;
           security = true;
-          // public source and public destination
-          while (tempInit.terminal != destination.terminal &&
-              tempInit.floor != destination.floor &&
-              tempInit.xValue != destination.xValue &&
-              tempInit.yValue != destination.yValue) {
-            if (tempInit.terminal == destination.terminal) {
-              if (tempInit.floor == destination.floor) {
-                // NavDone
-                navigations.add(destination);
-                tempInit = destination;
-              } else {
-                Elevate tempLV =
-                    await closestElevate(tempInit, destination.floor);
-                navigations.add(createLoc(false, tempLV.terminal,
-                    tempLV.inFloor, tempLV.xValue, tempLV.yValue));
-                Location currLoc = createLoc(false, tempLV.terminal,
-                    tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-                navigations.add(currLoc);
-                tempInit = currLoc;
-              }
-            } else {
-              if (tempInit.terminal != '3' && tempInit.floor == '1') {
-                navigations.add(await closestDest(tempInit, "Skytrain"));
-                var newTerminal = locList.firstWhere((loc) =>
-                    loc.terminal == destination.terminal &&
-                    loc.category == "Skytrain");
-                navigations.add(newTerminal);
-                tempInit = newTerminal;
-              } else if (tempInit.terminal != '3' && tempInit.floor != '1') {
-                Elevate tempLV = await closestElevate(tempInit, '1');
-                navigations.add(createLoc(false, tempLV.terminal,
-                    tempLV.inFloor, tempLV.xValue, tempLV.yValue));
-                Location currLoc = createLoc(false, tempLV.terminal,
-                    tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-                navigations.add(currLoc);
-                tempInit = currLoc;
-              } else if (tempInit.terminal == '3' && tempInit.floor == '3') {
-                navigations.add(await closestDest(tempInit, "Skytrain"));
-                var newTerminal = locList.firstWhere((loc) =>
-                    loc.terminal == destination.terminal &&
-                    loc.category == "Skytrain");
-                navigations.add(newTerminal);
-                tempInit = newTerminal;
-              } else if (tempInit.terminal == '3' && tempInit.floor != '3') {
-                Elevate tempLV = await closestElevate(tempInit, '3');
-                navigations.add(createLoc(false, tempLV.terminal,
-                    tempLV.inFloor, tempLV.xValue, tempLV.yValue));
-                Location currLoc = createLoc(false, tempLV.terminal,
-                    tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-                navigations.add(currLoc);
-                tempInit = currLoc;
-              }
-            }
-          }
         } else {
           Elevate tempLV = await closestElevate(tempInit, destination.floor);
-          navigations.add(createLoc(false, tempLV.terminal, tempLV.inFloor,
+          addNavigation(createLoc(false, tempLV.terminal, tempLV.inFloor,
               tempLV.xValue, tempLV.yValue));
-          Location currLoc = createLoc(
-              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-          navigations.add(currLoc);
-          tempInit = currLoc;
+          addNavigation(createLoc(
+              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo));
         }
       } else {
         if (tempInit.terminal != '3' && tempInit.floor == '1') {
-          navigations.add(await closestDest(tempInit, "Skytrain"));
-          var newTerminal = locList.firstWhere((loc) =>
+          addNavigation(await closestDest(tempInit, "Skytrain"));
+          addNavigation(locList.firstWhere((loc) =>
               loc.terminal == destination.terminal &&
-              loc.category == "Skytrain");
-          navigations.add(newTerminal);
-          tempInit = newTerminal;
+              loc.category == "Skytrain"));
         } else if (tempInit.terminal != '3' && tempInit.floor != '1') {
           Elevate tempLV = await closestElevate(tempInit, '1');
-          navigations.add(createLoc(false, tempLV.terminal, tempLV.inFloor,
+          addNavigation(createLoc(false, tempLV.terminal, tempLV.inFloor,
               tempLV.xValue, tempLV.yValue));
-          Location currLoc = createLoc(
-              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-          navigations.add(currLoc);
-          tempInit = currLoc;
+          addNavigation(createLoc(
+              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo));
         } else if (tempInit.terminal == '3' && tempInit.floor == '3') {
-          navigations.add(await closestDest(tempInit, "Skytrain"));
-          var newTerminal = locList.firstWhere((loc) =>
+          addNavigation(await closestDest(tempInit, "Skytrain"));
+          addNavigation(locList.firstWhere((loc) =>
               loc.terminal == destination.terminal &&
-              loc.category == "Skytrain");
-          navigations.add(newTerminal);
-          tempInit = newTerminal;
+              loc.category == "Skytrain"));
         } else if (tempInit.terminal == '3' && tempInit.floor != '3') {
           Elevate tempLV = await closestElevate(tempInit, '3');
-          navigations.add(createLoc(false, tempLV.terminal, tempLV.inFloor,
+          addNavigation(createLoc(false, tempLV.terminal, tempLV.inFloor,
               tempLV.xValue, tempLV.yValue));
-          Location currLoc = createLoc(
-              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo);
-          navigations.add(currLoc);
-          tempInit = currLoc;
+          addNavigation(createLoc(
+              false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo));
         }
+      }
+    }
+  }
+
+  // public source and public destination
+  while (tempInit.name != destination.name) {
+    if (tempInit.terminal == destination.terminal) {
+      if (tempInit.floor == destination.floor) {
+        // NavDone
+        addNavigation(destination);
+      } else {
+        Elevate tempLV = await closestElevate(tempInit, destination.floor);
+        addNavigation(createLoc(false, tempLV.terminal, tempLV.inFloor,
+            tempLV.xValue, tempLV.yValue));
+        addNavigation(createLoc(
+            false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo));
+      }
+    } else {
+      if (tempInit.terminal != '3' && tempInit.floor == '1') {
+        addNavigation(await closestDest(tempInit, "Skytrain"));
+        addNavigation(locList.firstWhere((loc) =>
+            loc.terminal == destination.terminal &&
+            loc.category == "Skytrain"));
+      } else if (tempInit.terminal != '3' && tempInit.floor != '1') {
+        Elevate tempLV = await closestElevate(tempInit, '1');
+        addNavigation(createLoc(false, tempLV.terminal, tempLV.inFloor,
+            tempLV.xValue, tempLV.yValue));
+        addNavigation(createLoc(
+            false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo));
+      } else if (tempInit.terminal == '3' && tempInit.floor == '3') {
+        addNavigation(await closestDest(tempInit, "Skytrain"));
+        addNavigation(locList.firstWhere((loc) =>
+            loc.terminal == destination.terminal &&
+            loc.category == "Skytrain"));
+      } else if (tempInit.terminal == '3' && tempInit.floor != '3') {
+        Elevate tempLV = await closestElevate(tempInit, '3');
+        addNavigation(createLoc(false, tempLV.terminal, tempLV.inFloor,
+            tempLV.xValue, tempLV.yValue));
+        addNavigation(createLoc(
+            false, tempLV.terminal, tempLV.toFloor, tempLV.xTo, tempLV.yTo));
       }
     }
   }

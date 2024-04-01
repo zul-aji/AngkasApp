@@ -1,4 +1,5 @@
 import 'package:angkasapp/util/map_util.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../util/const.dart';
@@ -401,7 +402,17 @@ class _MapNavigateState extends State<MapNavigate> {
             ),
             GestureDetector(
               onTap: () async {
-                if (initialLoc != null && destLoc != null) {
+                if (initialLoc == null) {
+                  const AlertDialog(
+                    title: Text("Empty Source"),
+                    content: Text("From not picked"),
+                  );
+                } else if (destLoc == null) {
+                  const AlertDialog(
+                    title: Text("Empty Destination"),
+                    content: Text("To not picked"),
+                  );
+                } else {
                   List<Location> navList =
                       await setNavigationList(initialLoc!, destLoc!);
                   if (navList.isNotEmpty) {
@@ -412,6 +423,11 @@ class _MapNavigateState extends State<MapNavigate> {
                           navList: navList,
                         ),
                       ),
+                    );
+                  } else {
+                    const AlertDialog(
+                      title: Text("You have arrived"),
+                      content: Text("Source and Destination is the same"),
                     );
                   }
                 }
