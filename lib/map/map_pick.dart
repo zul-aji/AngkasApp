@@ -46,13 +46,14 @@ class _MapPickState extends State<MapPick> {
                             ? Image.asset(tMap!)
                             : Image.asset(mapLink('1', '1')),
                         Visibility(
-                          visible: true,
-                          // (xMap == null && yMap == null) ? false : true,
+                          visible:
+                              // true,
+                              (xMap == null && yMap == null) ? false : true,
                           child: Positioned(
                               // left: xMap?.toDouble() ?? 0,
                               // top: yMap?.toDouble() ?? 0,
-                              left: 360,
-                              top: 0,
+                              left: 30,
+                              top: 230,
                               child: Icon(
                                 Icons.location_pin,
                                 color: Colors.grey,

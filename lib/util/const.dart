@@ -88,10 +88,10 @@ class Location {
   final String category;
   final String terminal;
   final String floor;
-  final int xMap;
-  final int yMap;
   final int xValue;
   final int yValue;
+  final int xMap;
+  final int yMap;
   final bool public;
   final Security? security;
 
@@ -320,8 +320,8 @@ List<Location> locList = [
 
   // Terminal 2 Floor 2
   // Gate
-  Location("Gate D1", "Gate", "2", "2", 56, 241, 54, 250, false, secList[3]),
-  Location("Gate D2", "Gate", "2", "2", 42, 227, 37, 232, false, secList[3]),
+  Location("Gate D1", "Gate", "2", "2", 56, 241, 48, 250, false, secList[3]),
+  Location("Gate D2", "Gate", "2", "2", 42, 227, 30, 230, false, secList[3]),
   Location("Gate D3", "Gate", "2", "2", 32, 207, 28, 212, false, secList[3]),
   Location("Gate D4", "Gate", "2", "2", 37, 190, 30, 187, false, secList[3]),
   Location("Gate D5", "Gate", "2", "2", 53, 182, 53, 175, false, secList[3]),
@@ -403,26 +403,26 @@ List<Location> locList = [
       secList[2]),
 
   // Terminal 2
-  Location("Check-In Gate D/E", "Check-In", "2", "2", 134, 210, 129, 210, true,
-      null),
-  Location(
+  const Location("Check-In Gate D/E", "Check-In", "2", "2", 134, 210, 129, 210,
+      true, null),
+  const Location(
       "Check-In Gate E", "Check-In", "2", "2", 204, 202, 204, 200, true, null),
-  Location(
+  const Location(
       "Check-In Gate F", "Check-In", "2", "2", 238, 216, 237, 211, true, null),
 
   // Terminal 3
-  Location("Check-In Island A", "Check-In", "3", "3", 109, 179, 109, 165, true,
-      null),
-  Location("Check-In Island B", "Check-In", "3", "3", 131, 179, 131, 165, true,
-      null),
-  Location("Check-In Island C", "Check-In", "3", "3", 154, 179, 154, 165, true,
-      null),
-  Location("Check-In Island D", "Check-In", "3", "3", 206, 179, 206, 165, true,
-      null),
-  Location("Check-In Island E", "Check-In", "3", "3", 229, 179, 229, 165, true,
-      null),
-  Location("Check-In Island F", "Check-In", "3", "3", 251, 179, 251, 165, true,
-      null),
+  const Location("Check-In Island A", "Check-In", "3", "3", 109, 179, 109, 165,
+      true, null),
+  const Location("Check-In Island B", "Check-In", "3", "3", 131, 179, 131, 165,
+      true, null),
+  const Location("Check-In Island C", "Check-In", "3", "3", 154, 179, 154, 165,
+      true, null),
+  const Location("Check-In Island D", "Check-In", "3", "3", 206, 179, 206, 165,
+      true, null),
+  const Location("Check-In Island E", "Check-In", "3", "3", 229, 179, 229, 165,
+      true, null),
+  const Location("Check-In Island F", "Check-In", "3", "3", 251, 179, 251, 165,
+      true, null),
 
   // Baggage Claim
   Location("Baggage Claim Gate A", "Baggage Claim", "1", "1", 90, 187, 87, 185,
@@ -433,7 +433,10 @@ List<Location> locList = [
       232, false, secList[2]),
 
   //SkyTrain
-  Location("Skytrain", "Skytrain", "1", "1", 181, 214, 181, 220, true, null),
-  Location("Skytrain", "Skytrain", "2", "1", 180, 235, 180, 240, true, null),
-  Location("Skytrain", "Skytrain", "3", "3", 180, 238, 180, 244, true, null),
+  const Location(
+      "Skytrain", "Skytrain", "1", "1", 181, 214, 181, 220, true, null),
+  const Location(
+      "Skytrain", "Skytrain", "2", "1", 180, 235, 180, 240, true, null),
+  const Location(
+      "Skytrain", "Skytrain", "3", "3", 180, 238, 180, 244, true, null),
 ];
