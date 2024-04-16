@@ -6,7 +6,7 @@ import 'map_painter.dart';
 typedef Pair = Tuple2<Location, Location>;
 
 class MapOverlay extends StatefulWidget {
-  MapOverlay({
+  const MapOverlay({
     super.key,
     required this.navList,
   });
@@ -21,14 +21,6 @@ class _MapOverlayState extends State<MapOverlay> {
   @override
   Widget build(BuildContext context) {
     List<Pair> navPair = createPairs(widget.navList);
-    for (var i = 0; i < navPair.length; i++) {
-      print("Step: ${i + 1}");
-      print(
-          "Terminal: ${navPair[i].item1.terminal}, ${navPair[i].item2.terminal}");
-      print(
-          "Category: ${navPair[i].item1.category}, ${navPair[i].item2.category}");
-      print("Floor: ${navPair[i].item1.floor}, ${navPair[i].item2.floor}");
-    }
     return Scaffold(
       body: Center(
         child: Container(
@@ -315,11 +307,11 @@ class _MapOverlayState extends State<MapOverlay> {
     List<Pair> pairs = [];
 
     for (int i = 0; i < data.length - 1; i++) {
-      if (data[i].category == "Skytrain" &&
-          data[i + 1].category == "Skytrain") {
+      if ((data[i].category == "Skytrain" &&
+              data[i + 1].category == "Skytrain") ||
+          (data[i].category == "Elevate" &&
+              data[i + 1].category == "Elevate")) {
         continue;
-      } else if (data[i].category == "Elevate" &&
-          data[i + 1].category == "Elevate") {
       } else {
         pairs.add(Pair(data[i], data[i + 1]));
       }

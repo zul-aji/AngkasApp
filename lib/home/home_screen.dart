@@ -4,8 +4,8 @@ import 'package:angkasapp/util/reminder_util.dart';
 import 'package:flutter/material.dart';
 
 import '../flight/find_flight.dart';
+import '../flight/flight_schedule.dart';
 import '../map/map_pick.dart';
-import '../schedule/flight_schedule.dart';
 import '../map/map_overlay.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Main Screen'),
+        title: const Text('Home'),
         actions: [
           IconButton(
               onPressed: () => Navigator.push(

@@ -50,11 +50,11 @@ class _MapPickState extends State<MapPick> {
                               // true,
                               (xMap == null && yMap == null) ? false : true,
                           child: Positioned(
-                              // left: xMap?.toDouble() ?? 0,
-                              // top: yMap?.toDouble() ?? 0,
-                              left: 30,
-                              top: 230,
-                              child: Icon(
+                              left: xMap?.toDouble() ?? 0,
+                              top: yMap?.toDouble() ?? 0,
+                              // left: 30,
+                              // top: 230,
+                              child: const Icon(
                                 Icons.location_pin,
                                 color: Colors.grey,
                               )),

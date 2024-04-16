@@ -342,7 +342,7 @@ void callDialog(BuildContext context, String flightIata, String arrTime,
     } else {
       LocalNotif.setScheduledNotification(
           title: flightIata,
-          body: 'flight is arriving',
+          body: isArr ? 'flight is arriving' : 'flight is departing',
           payload: 'payload',
           flightTime: tz.TZDateTime.from(flightDateTime, jakLoc),
           id: isArr ? flightIata.hashCode : flightIata.hashCode + 1);

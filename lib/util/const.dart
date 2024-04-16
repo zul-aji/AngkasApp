@@ -319,9 +319,9 @@ List<Location> locList = [
       false, secList[5]),
 
   // Terminal 2 Floor 2
-  // Gate
-  Location("Gate D1", "Gate", "2", "2", 56, 241, 48, 250, false, secList[3]),
-  Location("Gate D2", "Gate", "2", "2", 42, 227, 30, 230, false, secList[3]),
+  // GateCateg
+  Location("Gate D1", "Gate", "2", "2", 56, 241, 48, 250, false, secList[3]), //
+  Location("Gate D2", "Gate", "2", "2", 42, 227, 30, 230, false, secList[3]), //
   Location("Gate D3", "Gate", "2", "2", 32, 207, 28, 212, false, secList[3]),
   Location("Gate D4", "Gate", "2", "2", 37, 190, 30, 187, false, secList[3]),
   Location("Gate D5", "Gate", "2", "2", 53, 182, 53, 175, false, secList[3]),

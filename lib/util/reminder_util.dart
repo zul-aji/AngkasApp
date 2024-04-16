@@ -197,7 +197,6 @@ class HiveFuncs {
       final details = entry['details'];
       final scheduleFlight = ScheduleFlights.fromMap(details);
 
-      // Assuming flightIata is a property in ScheduleFlights class
       return scheduleFlight.flightIata == flightIata;
     });
   }

@@ -22,6 +22,7 @@ class FlightDetailsPage extends StatefulWidget {
 class _FlightDetailsPageState extends State<FlightDetailsPage> {
   bool _isLoading = true;
   bool _isInReminder = false;
+  bool _isArr = true;
   FlightDetails? flightDetails;
 
   void getScheduleFlights() async {
@@ -35,7 +36,16 @@ class _FlightDetailsPageState extends State<FlightDetailsPage> {
   @override
   void initState() {
     getScheduleFlights();
-    _isInReminder = HiveFuncs.checkCurrentFlight(widget.flightIata, true);
+    if (HiveFuncs.checkCurrentFlight(widget.flightIata, true)) {
+      _isInReminder = true;
+      _isArr = true;
+    } else if (HiveFuncs.checkCurrentFlight(widget.flightIata, false)) {
+      _isInReminder = true;
+      _isArr = false;
+    } else {
+      _isInReminder = false;
+    }
+
     super.initState();
   }
 
@@ -60,11 +70,14 @@ class _FlightDetailsPageState extends State<FlightDetailsPage> {
                   onPressed: () async {
                     _isInReminder
                         ? {
-                            LocalNotif.stopNotification(widget.isArr
+                            LocalNotif.stopNotification(_isArr
                                 ? widget.flightIata.hashCode
                                 : widget.flightIata.hashCode + 1),
-                            HiveFuncs.deleteReminder(
-                                widget.flightIata, widget.isArr)
+                            HiveFuncs.deleteReminder(widget.flightIata, _isArr),
+                            setState(() {
+                              _isInReminder = HiveFuncs.checkCurrentFlight(
+                                  widget.flightIata, _isArr);
+                            })
                           }
                         : callDialog(context, widget.flightIata, arrTime,
                             depTime, _isInReminder, flightDetails);

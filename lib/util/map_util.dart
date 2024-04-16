@@ -14,10 +14,14 @@ class ImageDetail {
 }
 
 Future<ImageDetail> getImageDimensions(String assetPath) async {
+  // Load the image data as a byte array from the asset bundle.
   final byteData = await rootBundle.load(assetPath);
   final bytes = byteData.buffer.asUint8List();
+
+  // Decode the image data to access its intrinsic dimensions.
   final decodedImage = await decodeImageFromList(bytes);
 
+  // Return the image details including width, height, and the raw bytes.
   return ImageDetail(
     width: decodedImage.width,
     height: decodedImage.height,
@@ -25,9 +29,13 @@ Future<ImageDetail> getImageDimensions(String assetPath) async {
   );
 }
 
+/// Loads an image from the given path and returns an `img.Image` object.
+
 Future<img.Image?> loadImage(String path) async {
-  // Load the image from the given path
+  // Get the image details (width, height, and bytes) first.
   ImageDetail imageDetail = await getImageDimensions(path);
+
+  // Decode the raw image bytes into a full `img.Image` object.
   return img.decodeImage(Uint8List.fromList(imageDetail.bytes!));
 }
 
@@ -45,15 +53,15 @@ List<List<int>> convertImageToGrid(img.Image image) {
   );
 }
 
-void RGBaValue(img.Image image, int x, int y) {
-  final pixel = image.getPixel(x, y);
-  final red = img.getRed(pixel);
-  final green = img.getGreen(pixel);
-  final blue = img.getBlue(pixel);
-  final alpha = img.getAlpha(pixel);
+// void RGBaValue(img.Image pixel, int x, int y) {
+//   final color = pixel.getPixel(x, y);
+//   final red = img.getRed(color);
+//   final green = img.getGreen(color);
+//   final blue = img.getBlue(color);
+//   final alpha = img.getAlpha(color);
 
-  print('RGBa value at pixel ($x, $y): ($red, $green, $blue, $alpha)');
-}
+//   print('RGBa value at pixel ($x, $y): ($red, $green, $blue, $alpha)');
+// }
 
 class ImageProcessor {
   static Future<List<List<int>>> processCustomMap(String path) async {
@@ -63,8 +71,6 @@ class ImageProcessor {
     if (originalImage == null) {
       throw Exception('Failed to load the image');
     }
-
-    // RGBaValue(originalImage, 200, 180);
 
     // Convert the resized image to a grid
     List<List<int>> grid = convertImageToGrid(originalImage);
@@ -79,18 +85,15 @@ bool isPath(int pixel) {
   int green = img.getGreen(pixel);
   int blue = img.getBlue(pixel);
 
-  // Define your target color values
+  // Define target color values
   int targetRed = 0;
   int targetGreen = 255;
   int targetBlue = 0;
 
-  // Define a tolerance range for each color channel
-  int tolerance = 0;
-
   // Check if the pixel is a path based on the tolerance range
-  if ((red >= targetRed - tolerance && red <= targetRed + tolerance) &&
-      (green >= targetGreen - tolerance && green <= targetGreen + tolerance) &&
-      (blue >= targetBlue - tolerance && blue <= targetBlue + tolerance)) {
+  if ((red >= targetRed && red <= targetRed) &&
+      (green >= targetGreen && green <= targetGreen) &&
+      (blue >= targetBlue && blue <= targetBlue)) {
     return true; // It's a path
   } else {
     return false; // It's an obstacle
