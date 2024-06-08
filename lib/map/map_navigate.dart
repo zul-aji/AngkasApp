@@ -403,14 +403,42 @@ class _MapNavigateState extends State<MapNavigate> {
             GestureDetector(
               onTap: () async {
                 if (initialLoc == null) {
-                  const AlertDialog(
-                    title: Text("Empty Source"),
-                    content: Text("From not picked"),
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(
+                        "No Source",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      content: Text(
+                        "'From' location not picked",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Close'),
+                          child: const Text('Close'),
+                        ),
+                      ],
+                    ),
                   );
                 } else if (destLoc == null) {
-                  const AlertDialog(
-                    title: Text("Empty Destination"),
-                    content: Text("To not picked"),
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("No Destination",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      content: Text(
+                        "'To' location not picked",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Close'),
+                          child: const Text('Close'),
+                        ),
+                      ],
+                    ),
                   );
                 } else {
                   List<Location> navList =
