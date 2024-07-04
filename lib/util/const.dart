@@ -38,7 +38,7 @@ String pathLink(String terminal, String floor) {
 }
 
 const String baseAirlabsURL = "https://airlabs.co/api/v9";
-const String apiKey = "76116d05-65b6-4468-a71c-ac1facef1ba6";
+const String apiKey = "API_KEY";
 
 tz.Location jakLoc = tz.getLocation('Asia/Jakarta');
 tz.TZDateTime jakartaTime = tz.TZDateTime.now(jakLoc);
