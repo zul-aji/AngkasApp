@@ -2,6 +2,11 @@
 
 Welcome to the repository for the **AngkasApp: Soekarno-Hatta Airport Navigation App**, a mobile solution developed as part of my bachelor's thesis. This project is designed to enhance the travel experience by providing efficient navigation and essential travel tools for one of Indonesia's largest and busiest airports.
 
+![image](https://github.com/user-attachments/assets/2a79f9e1-37e0-459c-8efb-c925b93d615d)
+![image](https://github.com/user-attachments/assets/ab4c9e1c-c47a-4d90-b6fa-8db53947f26b)
+![image](https://github.com/user-attachments/assets/8e959d1f-5948-49cd-b557-8a359fd0260f)
+
+---
 ## 📜 Project Overview
 
 The **Soekarno-Hatta Airport Navigation App** addresses the challenges of navigating the complex layout of Soekarno-Hatta International Airport. It combines advanced pathfinding algorithms and user-friendly features to offer an intuitive and reliable guide for passengers. 
